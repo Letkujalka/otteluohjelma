@@ -48,7 +48,8 @@ function serviceFor(comp, home, away) {
 // Kategorioiden joukkuelistat: aiemmin nähdyt + oletussuosikit + tämän haun joukkueet.
 // Listasta ei pudoteta ketään, jotta suosikin voi valita silloinkin, kun sillä ei ole pelejä.
 const teams = {};
-for (const c of cfg.categories) teams[c.id] = new Set([...(old.teams[c.id] || []), ...c.defaults]);
+// Vanhat nimet ajetaan suomennoksen läpi, jotta uusi suomennos korvaa englanninkielisen nimen.
+for (const c of cfg.categories) teams[c.id] = new Set([...(old.teams[c.id] || []).map(fiName), ...c.defaults]);
 
 function game(comp, id, start, home, away, state, hs, as, detail, round = '') {
   return {
