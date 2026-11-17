@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-17T18:41:31.098Z",
+ "updated": "2026-11-17T18:42:16.309Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -86,6 +86,7 @@
    "Albania",
    "Andorra",
    "Armenia",
+   "Azerbaidžan",
    "Azerbaijan",
    "Belarus",
    "Belgia",
@@ -94,6 +95,7 @@
    "Englanti",
    "Espanja",
    "Faroe Islands",
+   "Färsaaret",
    "Georgia",
    "Gibraltar",
    "Irlanti",
@@ -102,6 +104,7 @@
    "Italia",
    "Itävalta",
    "Kazakhstan",
+   "Kazakstan",
    "Kosovo",
    "Kreikka",
    "Kroatia",
@@ -136,6 +139,7 @@
    "Turkki",
    "Ukraina",
    "Unkari",
+   "Valko-Venäjä",
    "Viro",
    "Wales"
   ]
@@ -172,21 +176,6 @@
    "service": "MTV Katsomo"
   },
   {
-   "id": "espn-401861173",
-   "start": "2026-11-15T17:00Z",
-   "cat": "national",
-   "comp": "nations",
-   "compName": "Kansojen liiga",
-   "round": "",
-   "home": "Belarus",
-   "away": "Albania",
-   "homeScore": 0,
-   "awayScore": 2,
-   "state": "post",
-   "detail": "",
-   "service": "MTV Katsomo"
-  },
-  {
    "id": "espn-401861174",
    "start": "2026-11-15T17:00Z",
    "cat": "national",
@@ -200,6 +189,21 @@
    "state": "post",
    "detail": "",
    "service": "Yle"
+  },
+  {
+   "id": "espn-401861173",
+   "start": "2026-11-15T17:00Z",
+   "cat": "national",
+   "comp": "nations",
+   "compName": "Kansojen liiga",
+   "round": "",
+   "home": "Valko-Venäjä",
+   "away": "Albania",
+   "homeScore": 0,
+   "awayScore": 2,
+   "state": "post",
+   "detail": "",
+   "service": "MTV Katsomo"
   },
   {
    "id": "espn-401861176",
@@ -268,7 +272,7 @@
    "comp": "nations",
    "compName": "Kansojen liiga",
    "round": "",
-   "home": "Faroe Islands",
+   "home": "Färsaaret",
    "away": "Moldova",
    "homeScore": 1,
    "awayScore": 0,
@@ -283,7 +287,7 @@
    "comp": "nations",
    "compName": "Kansojen liiga",
    "round": "",
-   "home": "Kazakhstan",
+   "home": "Kazakstan",
    "away": "Slovakia",
    "homeScore": 2,
    "awayScore": 2,
@@ -344,7 +348,7 @@
    "compName": "Maaottelu",
    "round": "",
    "home": "Andorra",
-   "away": "Azerbaijan",
+   "away": "Azerbaidžan",
    "homeScore": 1,
    "awayScore": 3,
    "state": "post",
