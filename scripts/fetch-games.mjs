@@ -43,8 +43,11 @@ function serviceFor(comp, favs) {
   return comp.service;
 }
 
+// Suomennos nimen perusteella; vertailu ilman aksentteja (esim. UEFA:n "Türki̇ye").
+const nameIndex = new Map(Object.entries(cfg.names).map(([k, v]) => [norm(k).replace(/[^a-z ]/g, ''), v]));
+const fiName = name => cfg.names[name] || nameIndex.get(norm(name).replace(/[^a-z ]/g, '')) || name;
 function displayName(name, fav) {
-  return fav ? fav.name : (cfg.names[name] || name);
+  return fav ? fav.name : fiName(name);
 }
 
 /* ---------- ESPN (jalkapallo) ---------- */
@@ -133,7 +136,7 @@ async function fetchUefa(comp) {
     const status = String(m.status || '').toUpperCase();
     const state = status === 'FINISHED' ? 'post' : status === 'LIVE' ? 'in' : 'pre';
     const sc = m.score?.total || m.score?.regular || {};
-    const label = n => `${cfg.names[n] || n} U${comp.age}`;
+    const label = n => `${fiName(n)} U${comp.age}`;
     games.push({
       id: `uefa-${m.id}`,
       start: new Date(m.kickOffTime?.dateTime || m.kickOffTime?.date).toISOString(),
