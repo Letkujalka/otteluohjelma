@@ -1,20 +1,65 @@
 {
- "updated": "2026-11-17T17:51:48.568Z",
- "failed": [
-  "laliga",
-  "copa",
-  "supercopa",
-  "bundesliga",
-  "pokal",
-  "ucl",
-  "uefasuper",
-  "nations",
-  "wcq",
-  "euroq",
-  "euro",
-  "friendly"
- ],
+ "updated": "2026-11-17T17:52:43.990Z",
+ "failed": [],
  "games": [
+  {
+   "id": "espn-401861174",
+   "start": "2026-11-15T17:00Z",
+   "sport": "soccer",
+   "comp": "nations",
+   "compName": "Kansojen liiga",
+   "round": "",
+   "home": "Suomi",
+   "away": "San Marino",
+   "fav": [
+    "suomi"
+   ],
+   "homeScore": 7,
+   "awayScore": 2,
+   "state": "post",
+   "detail": "",
+   "tbd": false,
+   "service": "Yle Areena"
+  },
+  {
+   "id": "espn-401861177",
+   "start": "2026-11-15T19:45Z",
+   "sport": "soccer",
+   "comp": "nations",
+   "compName": "Kansojen liiga",
+   "round": "",
+   "home": "Ranska",
+   "away": "Turkki",
+   "fav": [
+    "ranska"
+   ],
+   "homeScore": 2,
+   "awayScore": 1,
+   "state": "post",
+   "detail": "",
+   "tbd": false,
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401861175",
+   "start": "2026-11-15T19:45Z",
+   "sport": "soccer",
+   "comp": "nations",
+   "compName": "Kansojen liiga",
+   "round": "",
+   "home": "Espanja",
+   "away": "Englanti",
+   "fav": [
+    "espanja",
+    "englanti"
+   ],
+   "homeScore": 2,
+   "awayScore": 3,
+   "state": "post",
+   "detail": "",
+   "tbd": false,
+   "service": "MTV Katsomo"
+  },
   {
    "id": "liiga-2027-2701468",
    "start": "2026-11-20T16:30:00.000Z",
@@ -35,6 +80,63 @@
    "service": "MTV Katsomo"
   },
   {
+   "id": "espn-401884736",
+   "start": "2026-11-20T19:30Z",
+   "sport": "soccer",
+   "comp": "bundesliga",
+   "compName": "Bundesliga",
+   "round": "",
+   "home": "Bayern München",
+   "away": "FC Cologne",
+   "fav": [
+    "bayern"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Viaplay"
+  },
+  {
+   "id": "espn-401882798",
+   "start": "2026-11-21T20:00Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "Real Madrid",
+   "away": "Celta Vigo",
+   "fav": [
+    "real"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
+   "id": "espn-401882804",
+   "start": "2026-11-22T13:00Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "FC Barcelona",
+   "away": "Villarreal",
+   "fav": [
+    "barca"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
    "id": "liiga-2027-2701476",
    "start": "2026-11-24T16:30:00.000Z",
    "sport": "hockey",
@@ -45,6 +147,63 @@
    "away": "Lukko",
    "fav": [
     "saipa"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401915298",
+   "start": "2026-11-24T20:00Z",
+   "sport": "soccer",
+   "comp": "ucl",
+   "compName": "Mestarien liiga",
+   "round": "",
+   "home": "Real Madrid",
+   "away": "PSV Eindhoven",
+   "fav": [
+    "real"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401915378",
+   "start": "2026-11-25T17:45Z",
+   "sport": "soccer",
+   "comp": "ucl",
+   "compName": "Mestarien liiga",
+   "round": "",
+   "home": "Sabah FK",
+   "away": "FC Barcelona",
+   "fav": [
+    "barca"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401915377",
+   "start": "2026-11-25T20:00Z",
+   "sport": "soccer",
+   "comp": "ucl",
+   "compName": "Mestarien liiga",
+   "round": "",
+   "home": "Lille",
+   "away": "Bayern München",
+   "fav": [
+    "bayern"
    ],
    "homeScore": null,
    "awayScore": null,
@@ -73,6 +232,25 @@
    "service": "MTV Katsomo"
   },
   {
+   "id": "espn-401884722",
+   "start": "2026-11-28T14:30Z",
+   "sport": "soccer",
+   "comp": "bundesliga",
+   "compName": "Bundesliga",
+   "round": "",
+   "home": "Hamburg SV",
+   "away": "Bayern München",
+   "fav": [
+    "bayern"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Viaplay"
+  },
+  {
    "id": "liiga-2027-2701492",
    "start": "2026-11-28T15:00:00.000Z",
    "sport": "hockey",
@@ -90,6 +268,82 @@
    "detail": "",
    "tbd": false,
    "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401932719",
+   "start": "2026-11-28T17:00Z",
+   "sport": "soccer",
+   "comp": "friendly",
+   "compName": "Maaottelu",
+   "round": "",
+   "home": "Espanja",
+   "away": "Chile",
+   "fav": [
+    "espanja"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "?"
+  },
+  {
+   "id": "espn-401882789",
+   "start": "2026-11-28T20:00Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "Real Madrid",
+   "away": "Alavés",
+   "fav": [
+    "real"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
+   "id": "espn-401882794",
+   "start": "2026-11-29T15:15Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "Deportivo",
+   "away": "FC Barcelona",
+   "fav": [
+    "barca"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
+   "id": "espn-401932935",
+   "start": "2026-12-01T19:45Z",
+   "sport": "soccer",
+   "comp": "pokal",
+   "compName": "DFB-Pokal",
+   "round": "",
+   "home": "Bayern München",
+   "away": "Hertha Berlin",
+   "fav": [
+    "bayern"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Viaplay"
   },
   {
    "id": "liiga-2027-2701499",
@@ -111,6 +365,44 @@
    "service": "MTV Katsomo"
   },
   {
+   "id": "espn-401882698",
+   "start": "2026-12-02T18:00Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "Real Sociedad",
+   "away": "Real Madrid",
+   "fav": [
+    "real"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
+   "id": "espn-401882700",
+   "start": "2026-12-02T20:30Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "FC Barcelona",
+   "away": "Atlético Madrid",
+   "fav": [
+    "barca"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
    "id": "liiga-2027-2701504",
    "start": "2026-12-04T16:30:00.000Z",
    "sport": "hockey",
@@ -128,6 +420,25 @@
    "detail": "",
    "tbd": false,
    "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401884718",
+   "start": "2026-12-04T19:30Z",
+   "sport": "soccer",
+   "comp": "bundesliga",
+   "compName": "Bundesliga",
+   "round": "",
+   "home": "Bayern München",
+   "away": "SC Paderborn 07",
+   "fav": [
+    "bayern"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Viaplay"
   },
   {
    "id": "liiga-2027-2701514",
@@ -149,6 +460,63 @@
    "service": "MTV Katsomo"
   },
   {
+   "id": "espn-401930339",
+   "start": "2026-12-05T17:30Z",
+   "sport": "soccer",
+   "comp": "friendly",
+   "compName": "Maaottelu",
+   "round": "",
+   "home": "Englanti",
+   "away": "Ukraina",
+   "fav": [
+    "englanti"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "?"
+  },
+  {
+   "id": "espn-401882783",
+   "start": "2026-12-05T20:00Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "FC Barcelona",
+   "away": "Celta Vigo",
+   "fav": [
+    "barca"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
+   "id": "espn-401882785",
+   "start": "2026-12-06T15:15Z",
+   "sport": "soccer",
+   "comp": "laliga",
+   "compName": "LaLiga",
+   "round": "",
+   "home": "Athletic Club",
+   "away": "Real Madrid",
+   "fav": [
+    "real"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "Disney+"
+  },
+  {
    "id": "liiga-2027-2701517",
    "start": "2026-12-08T16:30:00.000Z",
    "sport": "hockey",
@@ -159,6 +527,44 @@
    "away": "K-Espoo",
    "fav": [
     "saipa"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401915285",
+   "start": "2026-12-08T20:00Z",
+   "sport": "soccer",
+   "comp": "ucl",
+   "compName": "Mestarien liiga",
+   "round": "",
+   "home": "FC Barcelona",
+   "away": "Manchester City",
+   "fav": [
+    "barca"
+   ],
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "tbd": false,
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "espn-401915284",
+   "start": "2026-12-08T20:00Z",
+   "sport": "soccer",
+   "comp": "ucl",
+   "compName": "Mestarien liiga",
+   "round": "",
+   "home": "Bayern München",
+   "away": "Slavia Prague",
+   "fav": [
+    "bayern"
    ],
    "homeScore": null,
    "awayScore": null,
