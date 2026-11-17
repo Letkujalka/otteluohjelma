@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-17T18:05:30.302Z",
+ "updated": "2026-11-17T18:06:39.223Z",
  "failed": [],
  "games": [
   {
@@ -94,7 +94,7 @@
    "homeScore": 0,
    "awayScore": 0,
    "state": "in",
-   "detail": "20'",
+   "detail": "21'",
    "tbd": false,
    "service": "Yle"
   },
@@ -719,7 +719,7 @@
    "comp": "u19",
    "compName": "U19-EM",
    "round": "",
-   "home": "Türki̇ye U19",
+   "home": "Turkki U19",
    "away": "Suomi U19",
    "fav": [
     "suomi_u19"
