@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-17T18:42:16.309Z",
+ "updated": "2026-11-17T18:51:57.066Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -87,14 +87,11 @@
    "Andorra",
    "Armenia",
    "Azerbaidžan",
-   "Azerbaijan",
-   "Belarus",
    "Belgia",
    "Bosnia ja Hertsegovina",
    "Bulgaria",
    "Englanti",
    "Espanja",
-   "Faroe Islands",
    "Färsaaret",
    "Georgia",
    "Gibraltar",
@@ -103,7 +100,6 @@
    "Israel",
    "Italia",
    "Itävalta",
-   "Kazakhstan",
    "Kazakstan",
    "Kosovo",
    "Kreikka",
@@ -457,7 +453,7 @@
    "homeScore": 0,
    "awayScore": 0,
    "state": "in",
-   "detail": "",
+   "detail": "50'",
    "service": "Yle"
   },
   {
