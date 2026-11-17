@@ -1,8 +1,8 @@
 # Otteluohjelma
 
 Kännykkään asennettava web-sovellus (PWA), joka näyttää suosikkijoukkueiden
-pelit ja palvelun, josta pelin näkee: MTV Katsomo, Disney+, Viaplay tai
-Yle Areena. Tehty samalla tavalla kuin Salitreeni.
+pelit ja palvelun, josta pelin näkee: MTV Katsomo, Disney+ tai Yle
+(Areena, TV1, TV2). Mukana ovat myös kaikki Mestarien liigan ottelut. Tehty samalla tavalla kuin Salitreeni.
 
 ## Asennus puhelimeen (Android / Chrome)
 
@@ -19,7 +19,8 @@ Yle Areena. Tehty samalla tavalla kuin Salitreeni.
   pelissä näkyy LIVE ja tilanne, päättyneessä lopputulos.
 - **Vaihda:** jos palvelu on väärin, kortin "Vaihda"-linkistä valitaan oikea
   palvelu koko sarjalle tai vain yhdelle joukkueelle.
-- **Asetukset (⚙):** suosikkien piilotus ja sarjakohtaiset palvelut.
+- **Asetukset (⚙):** suosikkien piilotus, Mestarien liigan kaikkien
+  otteluiden näyttö ja sarjakohtaiset palvelut.
   Asetukset tallentuvat vain puhelimeen.
 
 ## Mistä pelit tulevat
@@ -29,6 +30,8 @@ Skripti hakee pelit ja kirjoittaa ne tiedostoon `games.json`, jonka sovellus
 lataa.
 
 - **Jalkapallo:** ESPN:n avoin otteluohjelma (`site.api.espn.com`).
+- **Suomen U21 ja U19:** UEFA:n otteluohjelma (`match.uefa.com`), EM-kisat ja
+  niiden karsinnat.
 - **Liiga:** liiga.fi:n otteluohjelma (`liiga.fi/api/v2/games`).
 
 MTV Katsomolla ja Disney+:lla ei ole julkista ohjelmatietoa, joten palvelu
@@ -38,9 +41,9 @@ päätellään sarjasta (`config.json`). Oletukset kaudelle 2026–27:
 |---|---|
 | Liiga | MTV Katsomo |
 | LaLiga, Copa del Rey, Supercopa | Disney+ |
-| Bundesliga, DFB-Pokal | Viaplay |
-| Mestarien liiga | MTV Katsomo |
-| Maajoukkueiden karsinnat ja Kansojen liiga | MTV Katsomo (Suomen pelit Yle Areena) |
+| Mestarien liiga (kaikki ottelut) | MTV Katsomo |
+| Muiden maajoukkueiden karsinnat ja Kansojen liiga | MTV Katsomo |
+| Huuhkajat, Suomi U21 ja U19 | Yle (Areena, TV1, TV2) |
 | Maaottelut (ystävyysottelut) | ei tiedossa |
 
 ## Joukkueiden ja sarjojen muokkaus
@@ -50,7 +53,7 @@ Muokkaa tiedostoa `config.json`:
 - `teams`: joukkueet. `match` sisältää nimet, joilla joukkue löytyy
   lähteestä (ESPN englanniksi, esim. "Bayern Munich"; Liiga suomeksi).
 - `competitions`: sarjat. `slug` on ESPN:n sarjatunnus (esim. `esp.1`,
-  `ger.1`, `uefa.champions`).
+  `uefa.champions`). `all: true` näyttää sarjan kaikki ottelut.
 - `services`: palvelut, niiden linkit ja värit.
 
 Muutos julkaistaan, kun se tallennetaan `main`-haaraan. Pelit voi hakea heti

@@ -1,52 +1,263 @@
 {
-  "_ohje": "Suosikkijoukkueet ja sarjat. match = nimet, joilla joukkue löytyy lähteestä (ESPN englanniksi, Liiga suomeksi). service = palvelu, jossa sarjan pelit näkyvät Suomessa. Joukkueen services-kenttä ohittaa sarjan palvelun.",
+  "_ohje": "Suosikkijoukkueet ja sarjat. match = nimet, joilla joukkue löytyy lähteestä (ESPN ja UEFA englanniksi, Liiga suomeksi). service = palvelu, jossa sarjan pelit näkyvät Suomessa; joukkueen service ohittaa sarjan palvelun. all: true = sarjan kaikki ottelut, ei vain suosikkien.",
   "teams": [
-    { "id": "saipa", "name": "SaiPa", "sport": "hockey", "match": ["SaiPa"] },
-    { "id": "real", "name": "Real Madrid", "sport": "soccer", "match": ["Real Madrid"] },
-    { "id": "barca", "name": "FC Barcelona", "sport": "soccer", "match": ["Barcelona", "FC Barcelona"] },
-    { "id": "bayern", "name": "Bayern München", "sport": "soccer", "match": ["Bayern Munich", "Bayern München", "Bayern Munchen", "FC Bayern München"] },
-    { "id": "espanja", "name": "Espanja", "sport": "soccer", "national": true, "match": ["Spain"] },
-    { "id": "ranska", "name": "Ranska", "sport": "soccer", "national": true, "match": ["France"] },
-    { "id": "suomi", "name": "Suomi", "sport": "soccer", "national": true, "match": ["Finland"],
-      "services": { "wcq": "Yle Areena", "euroq": "Yle Areena", "nations": "Yle Areena" } },
-    { "id": "englanti", "name": "Englanti", "sport": "soccer", "national": true, "match": ["England"] }
+    {
+      "id": "saipa",
+      "name": "SaiPa",
+      "sport": "hockey",
+      "match": [
+        "SaiPa"
+      ]
+    },
+    {
+      "id": "real",
+      "name": "Real Madrid",
+      "sport": "soccer",
+      "match": [
+        "Real Madrid"
+      ]
+    },
+    {
+      "id": "barca",
+      "name": "FC Barcelona",
+      "sport": "soccer",
+      "match": [
+        "Barcelona",
+        "FC Barcelona"
+      ]
+    },
+    {
+      "id": "espanja",
+      "name": "Espanja",
+      "sport": "soccer",
+      "national": true,
+      "match": [
+        "Spain"
+      ]
+    },
+    {
+      "id": "ranska",
+      "name": "Ranska",
+      "sport": "soccer",
+      "national": true,
+      "match": [
+        "France"
+      ]
+    },
+    {
+      "id": "suomi",
+      "name": "Huuhkajat",
+      "sport": "soccer",
+      "national": true,
+      "match": [
+        "Finland"
+      ],
+      "service": "Yle"
+    },
+    {
+      "id": "englanti",
+      "name": "Englanti",
+      "sport": "soccer",
+      "national": true,
+      "match": [
+        "England"
+      ]
+    },
+    {
+      "id": "suomi_u21",
+      "name": "Suomi U21",
+      "sport": "soccer",
+      "national": true,
+      "match": [
+        "Finland"
+      ],
+      "source": "uefa",
+      "age": 21,
+      "service": "Yle"
+    },
+    {
+      "id": "suomi_u19",
+      "name": "Suomi U19",
+      "sport": "soccer",
+      "national": true,
+      "match": [
+        "Finland"
+      ],
+      "source": "uefa",
+      "age": 19,
+      "service": "Yle"
+    }
   ],
   "competitions": [
-    { "id": "liiga", "name": "Liiga", "source": "liiga", "tournaments": ["runkosarja", "playoffs"], "service": "MTV Katsomo" },
-    { "id": "laliga", "name": "LaLiga", "source": "espn", "slug": "esp.1", "service": "Disney+" },
-    { "id": "copa", "name": "Copa del Rey", "source": "espn", "slug": "esp.copa_del_rey", "service": "Disney+" },
-    { "id": "supercopa", "name": "Supercopa", "source": "espn", "slug": "esp.super_cup", "service": "Disney+" },
-    { "id": "bundesliga", "name": "Bundesliga", "source": "espn", "slug": "ger.1", "service": "Viaplay" },
-    { "id": "pokal", "name": "DFB-Pokal", "source": "espn", "slug": "ger.dfb_pokal", "service": "Viaplay" },
-    { "id": "ucl", "name": "Mestarien liiga", "source": "espn", "slug": "uefa.champions", "service": "MTV Katsomo" },
-    { "id": "uefasuper", "name": "UEFA Superkup", "source": "espn", "slug": "uefa.super_cup", "service": "MTV Katsomo" },
-    { "id": "nations", "name": "Kansojen liiga", "source": "espn", "slug": "uefa.nations", "service": "MTV Katsomo" },
-    { "id": "wcq", "name": "MM-karsinta", "source": "espn", "slug": "fifa.worldq.uefa", "service": "MTV Katsomo" },
-    { "id": "euroq", "name": "EM-karsinta", "source": "espn", "slug": "uefa.euroq", "service": "MTV Katsomo" },
-    { "id": "euro", "name": "EM-kisat", "source": "espn", "slug": "uefa.euro", "service": "MTV Katsomo" },
-    { "id": "friendly", "name": "Maaottelu", "source": "espn", "slug": "fifa.friendly", "service": "?" }
+    {
+      "id": "liiga",
+      "name": "Liiga",
+      "source": "liiga",
+      "tournaments": [
+        "runkosarja",
+        "playoffs"
+      ],
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "laliga",
+      "name": "LaLiga",
+      "source": "espn",
+      "slug": "esp.1",
+      "service": "Disney+"
+    },
+    {
+      "id": "copa",
+      "name": "Copa del Rey",
+      "source": "espn",
+      "slug": "esp.copa_del_rey",
+      "service": "Disney+"
+    },
+    {
+      "id": "supercopa",
+      "name": "Supercopa",
+      "source": "espn",
+      "slug": "esp.super_cup",
+      "service": "Disney+"
+    },
+    {
+      "id": "ucl",
+      "name": "Mestarien liiga",
+      "source": "espn",
+      "slug": "uefa.champions",
+      "service": "MTV Katsomo",
+      "all": true
+    },
+    {
+      "id": "uefasuper",
+      "name": "UEFA Superkup",
+      "source": "espn",
+      "slug": "uefa.super_cup",
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "nations",
+      "name": "Kansojen liiga",
+      "source": "espn",
+      "slug": "uefa.nations",
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "wcq",
+      "name": "MM-karsinta",
+      "source": "espn",
+      "slug": "fifa.worldq.uefa",
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "euroq",
+      "name": "EM-karsinta",
+      "source": "espn",
+      "slug": "uefa.euroq",
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "euro",
+      "name": "EM-kisat",
+      "source": "espn",
+      "slug": "uefa.euro",
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "friendly",
+      "name": "Maaottelu",
+      "source": "espn",
+      "slug": "fifa.friendly",
+      "service": "?"
+    },
+    {
+      "id": "u21",
+      "name": "U21-EM",
+      "source": "uefa",
+      "age": 21,
+      "service": "Yle"
+    },
+    {
+      "id": "u19",
+      "name": "U19-EM",
+      "source": "uefa",
+      "age": 19,
+      "service": "Yle"
+    }
   ],
   "services": {
-    "MTV Katsomo": { "url": "https://www.mtv.fi/", "color": "#e6312e" },
-    "Disney+": { "url": "https://www.disneyplus.com/", "color": "#1a6dd6" },
-    "Viaplay": { "url": "https://viaplay.fi/", "color": "#9b3ad9" },
-    "Yle Areena": { "url": "https://areena.yle.fi/", "color": "#15a39a" },
-    "?": { "url": "", "color": "#59616e" }
+    "MTV Katsomo": {
+      "url": "https://www.mtv.fi/",
+      "color": "#e6312e"
+    },
+    "Disney+": {
+      "url": "https://www.disneyplus.com/",
+      "color": "#1a6dd6"
+    },
+    "Yle": {
+      "label": "Yle Areena / TV1 / TV2",
+      "url": "https://areena.yle.fi/",
+      "color": "#15a39a"
+    },
+    "?": {
+      "url": "",
+      "color": "#59616e"
+    }
   },
   "names": {
-    "Spain": "Espanja", "France": "Ranska", "Finland": "Suomi", "England": "Englanti",
-    "Germany": "Saksa", "Italy": "Italia", "Portugal": "Portugali", "Netherlands": "Alankomaat",
-    "Belgium": "Belgia", "Croatia": "Kroatia", "Sweden": "Ruotsi", "Norway": "Norja", "Denmark": "Tanska",
-    "Iceland": "Islanti", "Poland": "Puola", "Switzerland": "Sveitsi", "Austria": "Itävalta",
-    "Scotland": "Skotlanti", "Wales": "Wales", "Ireland": "Irlanti", "Republic of Ireland": "Irlanti",
-    "Northern Ireland": "Pohjois-Irlanti", "Czechia": "Tšekki", "Czech Republic": "Tšekki",
-    "Slovakia": "Slovakia", "Hungary": "Unkari", "Romania": "Romania", "Serbia": "Serbia",
-    "Greece": "Kreikka", "Turkey": "Turkki", "Türkiye": "Turkki", "Ukraine": "Ukraina",
-    "Estonia": "Viro", "Latvia": "Latvia", "Lithuania": "Liettua", "Andorra": "Andorra",
-    "Malta": "Malta", "Cyprus": "Kypros", "Georgia": "Georgia", "Albania": "Albania",
-    "Slovenia": "Slovenia", "Bosnia-Herzegovina": "Bosnia ja Hertsegovina", "Montenegro": "Montenegro",
-    "North Macedonia": "Pohjois-Makedonia", "Bulgaria": "Bulgaria", "Luxembourg": "Luxemburg",
-    "Brazil": "Brasilia", "Argentina": "Argentiina", "United States": "Yhdysvallat", "USA": "Yhdysvallat",
-    "Mexico": "Meksiko", "Japan": "Japani", "Morocco": "Marokko", "Bayern Munich": "Bayern München"
+    "Spain": "Espanja",
+    "France": "Ranska",
+    "Finland": "Suomi",
+    "England": "Englanti",
+    "Germany": "Saksa",
+    "Italy": "Italia",
+    "Portugal": "Portugali",
+    "Netherlands": "Alankomaat",
+    "Belgium": "Belgia",
+    "Croatia": "Kroatia",
+    "Sweden": "Ruotsi",
+    "Norway": "Norja",
+    "Denmark": "Tanska",
+    "Iceland": "Islanti",
+    "Poland": "Puola",
+    "Switzerland": "Sveitsi",
+    "Austria": "Itävalta",
+    "Scotland": "Skotlanti",
+    "Wales": "Wales",
+    "Ireland": "Irlanti",
+    "Republic of Ireland": "Irlanti",
+    "Northern Ireland": "Pohjois-Irlanti",
+    "Czechia": "Tšekki",
+    "Czech Republic": "Tšekki",
+    "Slovakia": "Slovakia",
+    "Hungary": "Unkari",
+    "Romania": "Romania",
+    "Serbia": "Serbia",
+    "Greece": "Kreikka",
+    "Turkey": "Turkki",
+    "Türkiye": "Turkki",
+    "Ukraine": "Ukraina",
+    "Estonia": "Viro",
+    "Latvia": "Latvia",
+    "Lithuania": "Liettua",
+    "Andorra": "Andorra",
+    "Malta": "Malta",
+    "Cyprus": "Kypros",
+    "Georgia": "Georgia",
+    "Albania": "Albania",
+    "Slovenia": "Slovenia",
+    "Bosnia-Herzegovina": "Bosnia ja Hertsegovina",
+    "Montenegro": "Montenegro",
+    "North Macedonia": "Pohjois-Makedonia",
+    "Bulgaria": "Bulgaria",
+    "Luxembourg": "Luxemburg",
+    "Brazil": "Brasilia",
+    "Argentina": "Argentiina",
+    "United States": "Yhdysvallat",
+    "USA": "Yhdysvallat",
+    "Mexico": "Meksiko",
+    "Japan": "Japani",
+    "Morocco": "Marokko",
+    "Bayern Munich": "Bayern München"
   }
 }

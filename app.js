@@ -4,7 +4,7 @@
    kahden tunnin välein. Omat asetukset (piilotetut joukkueet, palvelujen
    muutokset) tallennetaan selaimen localStorageen (avain KEY). */
 
-const APP_VERSION = '1';
+const APP_VERSION = '2';
 const KEY = 'otteluohjelma.v1';
 const TZ = 'Europe/Helsinki';
 const REFRESH_MIN = 10;
@@ -68,10 +68,14 @@ function serviceOf(g) {
   return S.services[g.comp] || g.service || compDefault || '?';
 }
 const svcInfo = name => (CFG.services && CFG.services[name]) || { url: '', color: '#59616e' };
+const svcLabel = name => name === '?' ? 'Ei tiedossa' : (svcInfo(name).label || name);
 
+// Peli näkyy, jos jokin sen suosikeista on näkyvissä tai sarjan kaikki ottelut
+// (esim. Mestarien liiga) on valittu näkyviin.
 function visibleGames() {
   if (!DATA) return [];
-  return DATA.games.filter(g => g.fav.some(f => !S.hidden.includes(f)));
+  return DATA.games.filter(g => g.fav.some(f => !S.hidden.includes(f))
+    || (compById(g.comp)?.all && !S.hidden.includes('comp:' + g.comp)));
 }
 
 /* ---------- näkymät ---------- */
@@ -106,8 +110,8 @@ function gameCard(g) {
   else if (g.state === 'post') when = `<span class="muted">Päättynyt</span>`;
   else when = `<span class="time">${g.tbd ? 'Aika auki' : fmtTime(g.start)}</span>`;
   const svcTag = info.url
-    ? `<a class="svc" style="--svc:${info.color}" href="${esc(info.url)}" target="_blank" rel="noopener">▶ ${esc(svc)}</a>`
-    : `<span class="svc" style="--svc:${info.color}">${svc === '?' ? 'Palvelu ei tiedossa' : esc(svc)}</span>`;
+    ? `<a class="svc" style="--svc:${info.color}" href="${esc(info.url)}" target="_blank" rel="noopener">▶ ${esc(svcLabel(svc))}</a>`
+    : `<span class="svc" style="--svc:${info.color}">${svc === '?' ? 'Palvelu ei tiedossa' : esc(svcLabel(svc))}</span>`;
   return `<div class="card game ${g.state}">
     <div class="g-head">${when}<span class="comp">${g.sport === 'hockey' ? '🏒' : '⚽'} ${esc(g.compName)}${g.round ? ' · ' + esc(g.round) : ''}</span></div>
     <div class="teams">${team(g.home, g.homeScore)}${team(g.away, g.awayScore)}</div>
@@ -170,24 +174,26 @@ function viewSettings() {
   h += `<div class="card"><h2>Suosikit</h2><p class="hint">Näytä pelit näiltä joukkueilta.</p>
     ${CFG.teams.map(t => `<button class="opt${S.hidden.includes(t.id) ? '' : ' sel'}" data-act="team" data-id="${t.id}">
       <span class="mark check"></span>${esc(t.name)}<small>${t.sport === 'hockey' ? '🏒' : '⚽'}${t.national ? ' maajoukkue' : ''}</small></button>`).join('')}
+    ${CFG.competitions.filter(c => c.all).map(c => `<button class="opt${S.hidden.includes('comp:' + c.id) ? '' : ' sel'}" data-act="team" data-id="comp:${c.id}">
+      <span class="mark check"></span>Kaikki: ${esc(c.name)}<small>⚽ sarja</small></button>`).join('')}
     <p class="hint">Uuden joukkueen lisäys: muokkaa tiedostoa <code>config.json</code> GitHubissa.</p></div>`;
 
   const names = Object.keys(CFG.services);
   const sel = (key, def) => `<select data-act="svcset" data-key="${esc(key)}">
-    ${names.map(n => `<option value="${esc(n)}"${(S.services[key] || def) === n ? ' selected' : ''}>${n === '?' ? 'Ei tiedossa' : esc(n)}</option>`).join('')}</select>`;
+    ${names.map(n => `<option value="${esc(n)}"${(S.services[key] || def) === n ? ' selected' : ''}>${esc(svcLabel(n))}</option>`).join('')}</select>`;
   h += `<div class="card"><h2>Missä sarjat näkyvät</h2><p class="hint">Oletukset ovat kauden 2026–27 oikeuksien mukaiset. Muuta, jos palvelu vaihtuu.</p>
     ${CFG.competitions.map(c => `<label>${esc(c.name)}${sel(c.id, c.service)}</label>`).join('')}`;
   const overrides = Object.keys(S.services).filter(k => k.includes('/'));
   if (overrides.length) {
     h += `<h2 style="margin-top:14px">Joukkuekohtaiset</h2>${overrides.map(k => {
       const [c, t] = k.split('/');
-      return `<div class="res"><span>${esc(teamById(t)?.name || t)} · ${esc(compById(c)?.name || c)}: <b>${esc(S.services[k])}</b></span>
+      return `<div class="res"><span>${esc(teamById(t)?.name || t)} · ${esc(compById(c)?.name || c)}: <b>${esc(svcLabel(S.services[k]))}</b></span>
         <button class="btn small" data-act="svcdel" data-key="${esc(k)}">Poista</button></div>`;
     }).join('')}`;
   }
   h += `</div>`;
   if (Object.keys(S.services).length) h += `<button class="btn block danger" data-act="svcreset">Palauta palvelujen oletukset</button>`;
-  h += `<p class="hint">Pelit haetaan ESPN:n otteluohjelmasta (jalkapallo) ja liiga.fi:stä (Liiga) kahden tunnin välein. Palvelu päätellään sarjasta: tarkista epävarmat (esim. maaottelut) palvelusta itsestään.</p>
+  h += `<p class="hint">Pelit haetaan ESPN:n ja UEFA:n otteluohjelmista (jalkapallo) ja liiga.fi:stä (Liiga) kahden tunnin välein. Palvelu päätellään sarjasta: tarkista epävarmat (esim. maaottelut) palvelusta itsestään.</p>
     ${DATA && DATA.failed && DATA.failed.length ? `<p class="hint">Viimeisimmässä haussa ei saatu: ${DATA.failed.map(id => esc(compById(id)?.name || id)).join(', ')} (näille näytetään edelliset tiedot).</p>` : ''}
     <p class="ver">Versio ${APP_VERSION}</p>`;
   return h;
@@ -248,10 +254,10 @@ function pickService(g) {
   const fav = g.fav[0];
   const favName = teamById(fav)?.name || fav;
   const opts = Object.keys(CFG.services).map(n => `<button class="opt${n === cur ? ' sel' : ''}" data-act="svcpick" data-name="${esc(n)}">
-    <span class="mark radio"></span>${n === '?' ? 'Ei tiedossa' : esc(n)}</button>`).join('');
+    <span class="mark radio"></span>${esc(svcLabel(n))}</button>`).join('');
   openModal(`<h2>${esc(g.home)} – ${esc(g.away)}</h2>
     <p class="hint">Missä palvelussa ${esc(comp?.name || g.compName)} näkyy?</p>${opts}
-    <label class="chk" style="margin-top:12px"><input type="checkbox" id="onlyTeam"${S.services[g.comp + '/' + fav] ? ' checked' : ''}> Koskee vain joukkuetta ${esc(favName)}</label>
+    ${fav ? `<label class="chk" style="margin-top:12px"><input type="checkbox" id="onlyTeam"${S.services[g.comp + '/' + fav] ? ' checked' : ''}> Koskee vain joukkuetta ${esc(favName)}</label>` : ''}
     <div class="row"><button class="btn" data-act="close">Peruuta</button></div>`, { game: g });
 }
 
@@ -279,7 +285,7 @@ document.addEventListener('click', e => {
       const onlyTeam = document.getElementById('onlyTeam')?.checked;
       const key = onlyTeam ? g.comp + '/' + g.fav[0] : g.comp;
       const name = el.dataset.name;
-      if (!onlyTeam) delete S.services[g.comp + '/' + g.fav[0]];
+      if (!onlyTeam && g.fav[0]) delete S.services[g.comp + '/' + g.fav[0]];
       const def = onlyTeam ? null : compById(g.comp)?.service;
       if (name === def) delete S.services[key]; else S.services[key] = name;
       save(); closeModal(); render(); break;
