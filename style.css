@@ -136,3 +136,31 @@ label.chk input { width: 20px; height: 20px; margin: 0; }
   background: var(--card); width: 100%; max-width: 640px; max-height: 88vh; overflow-y: auto;
   border-radius: 18px 18px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
 }
+
+/* Pyyhkäisy */
+html, body { overflow-x: hidden; }
+#pager { overflow: hidden; touch-action: pan-y; min-height: 70vh; margin: 0 -14px; padding: 0 14px; }
+#page { will-change: transform; }
+
+/* Asetusten kategoriat */
+details.cat { padding: 0; }
+details.cat > summary {
+  list-style: none; cursor: pointer; padding: 14px; display: flex; flex-direction: column; gap: 2px;
+}
+details.cat > summary::-webkit-details-marker { display: none; }
+details.cat > summary::after { content: '›'; position: absolute; right: 18px; font-size: 1.5rem; color: var(--muted); transition: transform .15s; }
+details.cat { position: relative; }
+details.cat[open] > summary::after { transform: rotate(90deg); }
+.cat-name { font-weight: 700; font-size: 1.05rem; }
+details.cat > summary small { padding-right: 24px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+details.cat > :not(summary) { margin-left: 14px; margin-right: 14px; }
+details.cat[open] { padding-bottom: 12px; }
+details.cat > label { display: block; }
+.opt.all { margin-bottom: 12px; width: calc(100% - 28px); }
+.search {
+  width: calc(100% - 28px); background: var(--bg); color: var(--text); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px; font: inherit; margin-bottom: 10px;
+}
+.teamlist { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6px; }
+.teamlist .opt { padding: 10px; font-size: .95rem; }
+@media (max-width: 340px) { .teamlist { grid-template-columns: 1fr; } }

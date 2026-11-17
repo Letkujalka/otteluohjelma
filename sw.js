@@ -1,6 +1,6 @@
 // Välimuisti, jotta sovellus aukeaa ilman verkkoyhteyttäkin.
 // Päivitys: kasvata CACHE-numeroa, kun sovelluksen tiedostot muuttuvat.
-const CACHE = 'otteluohjelma-2';
+const CACHE = 'otteluohjelma-3';
 const FILES = ['./', './index.html', './style.css', './app.js', './manifest.webmanifest',
   './config.json', './games.json',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];

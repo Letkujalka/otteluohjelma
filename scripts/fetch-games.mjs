@@ -1,4 +1,6 @@
-// Hakee suosikkijoukkueiden pelit ja kirjoittaa ne tiedostoon games.json.
+// Hakee kategorioiden (UCL, LaLiga, Liiga, maajoukkueet) pelit ja joukkueet
+// ja kirjoittaa ne tiedostoon games.json. Sovellus suodattaa pelit käyttäjän
+// suosikkien mukaan.
 // Ajetaan GitHub Actionsissa (ks. .github/workflows/pages.yml), Node 20+.
 // Lähteet: ESPN:n avoin otteluohjelma (jalkapallo), UEFA:n otteluohjelma
 // (nuorten maajoukkueet) ja liiga.fi (jääkiekko).
@@ -14,14 +16,15 @@ const DAYS_BACK = 2;
 const DAYS_AHEAD = Number(process.argv[process.argv.indexOf('--days') + 1]) || 21;
 
 const cfg = JSON.parse(await readFile(new URL('config.json', ROOT), 'utf8'));
-let old = { games: [] };
-try { old = JSON.parse(await readFile(OUT, 'utf8')); } catch { /* ensimmäinen ajo */ }
+let old = { games: [], teams: {} };
+try { old = { teams: {}, ...JSON.parse(await readFile(OUT, 'utf8')) }; } catch { /* ensimmäinen ajo */ }
 
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
-const teamIndex = new Map();
-// UEFA-lähteen joukkueet (U21, U19) tunnistetaan sarjasta, ei nimestä.
-for (const t of cfg.teams) if (t.source !== 'uefa') for (const m of t.match) teamIndex.set(norm(m), t);
-const favOf = name => teamIndex.get(norm(name));
+const key = s => norm(s).replace(/[^a-z0-9 ]/g, '');
+
+// Suomennos nimen perusteella; vertailu ilman aksentteja (esim. UEFA:n "Türki̇ye").
+const nameIndex = new Map(Object.entries(cfg.names).map(([k, v]) => [key(k), v]));
+const fiName = name => cfg.names[name] || nameIndex.get(key(name)) || name;
 
 const now = new Date();
 const from = new Date(now.getTime() - DAYS_BACK * 864e5);
@@ -38,21 +41,39 @@ async function getJson(url) {
 }
 
 // Joukkueen oma palvelu (esim. Suomen maajoukkueet Ylellä) voittaa sarjan palvelun.
-function serviceFor(comp, favs) {
-  for (const t of favs) if (t.service) return t.service;
-  return comp.service;
+function serviceFor(comp, home, away) {
+  return cfg.teamServices[home] || cfg.teamServices[away] || comp.service;
 }
 
-// Suomennos nimen perusteella; vertailu ilman aksentteja (esim. UEFA:n "Türki̇ye").
-const nameIndex = new Map(Object.entries(cfg.names).map(([k, v]) => [norm(k).replace(/[^a-z ]/g, ''), v]));
-const fiName = name => cfg.names[name] || nameIndex.get(norm(name).replace(/[^a-z ]/g, '')) || name;
-function displayName(name, fav) {
-  return fav ? fav.name : fiName(name);
+// Kategorioiden joukkuelistat: aiemmin nähdyt + oletussuosikit + tämän haun joukkueet.
+// Listasta ei pudoteta ketään, jotta suosikin voi valita silloinkin, kun sillä ei ole pelejä.
+const teams = {};
+for (const c of cfg.categories) teams[c.id] = new Set([...(old.teams[c.id] || []), ...c.defaults]);
+
+function game(comp, id, start, home, away, state, hs, as, detail, round = '') {
+  return {
+    id, start, cat: comp.cat, comp: comp.id, compName: comp.name, round, home, away,
+    homeScore: state === 'pre' ? null : hs ?? null,
+    awayScore: state === 'pre' ? null : as ?? null,
+    state, detail, service: serviceFor(comp, home, away),
+  };
 }
 
 /* ---------- ESPN (jalkapallo) ---------- */
 
+async function espnTeams(comp) {
+  try {
+    const data = await getJson(`https://site.api.espn.com/apis/site/v2/sports/soccer/${comp.slug}/teams`);
+    const list = data.sports?.[0]?.leagues?.[0]?.teams || [];
+    for (const t of list) teams[comp.cat].add(fiName(t.team.displayName));
+    console.log(`  ${comp.name}: ${list.length} joukkuetta`);
+  } catch (e) {
+    console.warn(`  ${comp.name}: joukkuelista ei onnistunut (${e.message.slice(0, 80)})`);
+  }
+}
+
 async function fetchEspn(comp) {
+  if (comp.teams) await espnTeams(comp);
   const base = `https://site.api.espn.com/apis/site/v2/sports/soccer/${comp.slug}/scoreboard`;
   let events;
   try {
@@ -60,7 +81,7 @@ async function fetchEspn(comp) {
     events = (await getJson(`${base}?dates=${ymd(from)}-${ymd(to)}`)).events || [];
   } catch (e) {
     // ESPN ei aina hyväksy aikaväliä: haetaan päivä kerrallaan.
-    console.log(`  ${comp.name}: aikaväli ei käy (${e.message.slice(0, 60)}…), haetaan päivittäin`);
+    console.log(`  ${comp.name}: aikaväli ei käy, haetaan päivittäin`);
     events = [];
     let ok = 0, lastErr;
     for (let d = new Date(from); d <= to; d = new Date(d.getTime() + 864e5)) {
@@ -73,29 +94,21 @@ async function fetchEspn(comp) {
   for (const ev of events) {
     const c = (ev.competitions || [])[0];
     if (!c) continue;
-    const home = c.competitors.find(x => x.homeAway === 'home') || c.competitors[0];
-    const away = c.competitors.find(x => x.homeAway === 'away') || c.competitors[1];
-    const names = [home, away].map(x => x.team.displayName || x.team.name);
-    const favs = names.map(favOf);
-    if (!comp.all && !favs.some(Boolean)) continue;
+    const h = c.competitors.find(x => x.homeAway === 'home') || c.competitors[0];
+    const a = c.competitors.find(x => x.homeAway === 'away') || c.competitors[1];
+    const home = fiName(h.team.displayName || h.team.name);
+    const away = fiName(a.team.displayName || a.team.name);
+    // Esim. ystävyysottelut ja Copa del Rey: vain pelit, joissa on kategorian tuttu joukkue.
+    if (comp.onlyKnown) {
+      if (!teams[comp.cat].has(home) && !teams[comp.cat].has(away)) continue;
+    } else {
+      teams[comp.cat].add(home); teams[comp.cat].add(away);
+    }
     const st = (ev.status || c.status || {}).type || {};
-    games.push({
-      id: `espn-${ev.id}`,
-      start: ev.date,
-      sport: 'soccer',
-      comp: comp.id,
-      compName: comp.name,
-      round: (c.notes || [])[0]?.headline || '',
-      home: displayName(names[0], favs[0]),
-      away: displayName(names[1], favs[1]),
-      fav: favs.filter(Boolean).map(t => t.id),
-      homeScore: st.state === 'pre' ? null : Number(home.score ?? NaN),
-      awayScore: st.state === 'pre' ? null : Number(away.score ?? NaN),
-      state: st.state === 'in' ? 'in' : st.state === 'post' ? 'post' : 'pre',
-      detail: st.state === 'in' ? (st.shortDetail || '') : '',
-      tbd: !!(st.name === 'STATUS_SCHEDULED' && ev.timeValid === false),
-      service: serviceFor(comp, favs.filter(Boolean)),
-    });
+    const state = st.state === 'in' ? 'in' : st.state === 'post' ? 'post' : 'pre';
+    games.push(game(comp, `espn-${ev.id}`, ev.date, home, away, state,
+      Number(h.score ?? NaN), Number(a.score ?? NaN), state === 'in' ? (st.shortDetail || '') : '',
+      (c.notes || [])[0]?.headline || ''));
   }
   return games;
 }
@@ -115,45 +128,25 @@ async function uefaMatches() {
     all.push(...list);
     if (list.length < 200) break;
   }
-  const comps = [...new Set(all.map(m => m.competition?.metaData?.name || m.competition?.translations?.name?.EN || '?'))];
-  console.log(`  UEFA: ${all.length} ottelua, sarjat: ${comps.join(', ')}`);
   return (uefaCache = all);
 }
 
 async function fetchUefa(comp) {
-  const team = cfg.teams.find(t => t.source === 'uefa' && t.age === comp.age);
-  if (!team) return [];
   const ageRe = new RegExp(`(under[ -]?${comp.age}|u${comp.age})\\b`, 'i');
-  const names = new Set(team.match.map(norm));
+  const wanted = new Set(comp.teams.map(key));
   const tname = t => t?.internationalName || t?.translations?.displayName?.EN || t?.name || '';
   const games = [];
   for (const m of await uefaMatches()) {
     const cname = m.competition?.metaData?.name || m.competition?.translations?.name?.EN || '';
     if (!ageRe.test(cname)) continue;
     const hn = tname(m.homeTeam), an = tname(m.awayTeam);
-    const isFav = [names.has(norm(hn)), names.has(norm(an))];
-    if (!isFav.some(Boolean)) continue;
+    if (!wanted.has(key(hn)) && !wanted.has(key(an))) continue;
+    const home = `${fiName(hn)} U${comp.age}`, away = `${fiName(an)} U${comp.age}`;
     const status = String(m.status || '').toUpperCase();
     const state = status === 'FINISHED' ? 'post' : status === 'LIVE' ? 'in' : 'pre';
     const sc = m.score?.total || m.score?.regular || {};
-    const label = n => `${fiName(n)} U${comp.age}`;
-    games.push({
-      id: `uefa-${m.id}`,
-      start: new Date(m.kickOffTime?.dateTime || m.kickOffTime?.date).toISOString(),
-      sport: 'soccer',
-      comp: comp.id,
-      compName: /qualif|karsin/i.test(cname + (m.round?.metaData?.name || '')) ? `${comp.name}-karsinta` : comp.name,
-      round: '',
-      home: isFav[0] ? team.name : label(hn),
-      away: isFav[1] ? team.name : label(an),
-      fav: [team.id],
-      homeScore: state === 'pre' ? null : sc.home ?? null,
-      awayScore: state === 'pre' ? null : sc.away ?? null,
-      state,
-      detail: state === 'in' && m.minute?.normal ? `${m.minute.normal}'` : '',
-      tbd: false,
-      service: team.service || comp.service,
-    });
+    games.push(game(comp, `uefa-${m.id}`, new Date(m.kickOffTime?.dateTime || m.kickOffTime?.date).toISOString(),
+      home, away, state, sc.home, sc.away, state === 'in' && m.minute?.normal ? `${m.minute.normal}'` : ''));
   }
   return games;
 }
@@ -171,33 +164,19 @@ async function fetchLiiga(comp) {
       list = await getJson(`https://liiga.fi/api/v2/games?tournament=${tournament}&season=${season}`);
       ok++;
     } catch (e) {
-      console.warn(`  ${tournament}: ${e.message}`);
+      console.warn(`  ${tournament}: ${e.message.slice(0, 80)}`);
       continue;
     }
     for (const g of Array.isArray(list) ? list : list.games || []) {
+      const home = g.homeTeam?.teamName, away = g.awayTeam?.teamName;
+      if (home) teams[comp.cat].add(home);
+      if (away) teams[comp.cat].add(away);
       const start = new Date(g.start);
-      if (!(start >= from && start <= to)) continue;
-      const hn = g.homeTeam?.teamName, an = g.awayTeam?.teamName;
-      const favs = [favOf(hn), favOf(an)];
-      if (!favs.some(Boolean)) continue;
+      if (!(start >= from && start <= to) || !home || !away) continue;
       const state = g.ended ? 'post' : g.started ? 'in' : 'pre';
-      games.push({
-        id: `liiga-${season}-${g.id}`,
-        start: start.toISOString(),
-        sport: 'hockey',
-        comp: comp.id,
-        compName: comp.name + (tournament === 'playoffs' ? ' – pudotuspelit' : ''),
-        round: '',
-        home: displayName(hn, favs[0]),
-        away: displayName(an, favs[1]),
-        fav: favs.filter(Boolean).map(t => t.id),
-        homeScore: state === 'pre' ? null : g.homeTeam?.goals ?? null,
-        awayScore: state === 'pre' ? null : g.awayTeam?.goals ?? null,
-        state,
-        detail: state === 'in' && g.gameTime ? `${Math.floor(g.gameTime / 60)}'` : '',
-        tbd: false,
-        service: serviceFor(comp, favs.filter(Boolean)),
-      });
+      const c = tournament === 'playoffs' ? { ...comp, name: comp.name + ' – pudotuspelit' } : comp;
+      games.push(game(c, `liiga-${season}-${g.id}`, start.toISOString(), home, away, state,
+        g.homeTeam?.goals, g.awayTeam?.goals, state === 'in' && g.gameTime ? `${Math.floor(g.gameTime / 60)}'` : ''));
     }
   }
   if (!ok) throw new Error('liiga.fi ei vastannut');
@@ -208,6 +187,7 @@ async function fetchLiiga(comp) {
 
 const all = [];
 const failed = [];
+// Järjestys config.json:n mukaan: joukkuelistat (teams: true) ennen onlyKnown-sarjoja.
 for (const comp of cfg.competitions) {
   try {
     const games = comp.source === 'liiga' ? await fetchLiiga(comp)
@@ -215,25 +195,25 @@ for (const comp of cfg.competitions) {
     console.log(`${comp.name}: ${games.length} peliä`);
     all.push(...games);
   } catch (e) {
-    console.warn(`${comp.name}: EPÄONNISTUI (${e.message}) – pidetään edelliset tiedot`);
+    console.warn(`${comp.name}: EPÄONNISTUI (${e.message.slice(0, 120)}) – pidetään edelliset tiedot`);
     failed.push(comp.id);
-    all.push(...old.games.filter(g => g.comp === comp.id && new Date(g.start) >= from));
+    all.push(...old.games.filter(g => g.comp === comp.id && g.cat && new Date(g.start) >= from));
   }
 }
 
-// Sama ottelu voi tulla kahdesta lähteestä (esim. useampi suosikki samassa pelissä) – poistetaan tuplat.
 const seen = new Set();
 const games = all
   .filter(g => (seen.has(g.id) ? false : seen.add(g.id)))
-  .sort((a, b) => a.start.localeCompare(b.start));
+  .sort((a, b) => a.start.localeCompare(b.start) || a.home.localeCompare(b.home, 'fi'));
 
 if (failed.length === cfg.competitions.length) {
   console.error('Yksikään lähde ei vastannut – games.json jätetään ennalleen.');
   process.exit(0);
 }
 
-const changed = JSON.stringify(games) !== JSON.stringify(old.games);
-await writeFile(OUT, JSON.stringify({ updated: now.toISOString(), failed, games }, null, 1) + '\n');
-console.log(`Yhteensä ${games.length} peliä${changed ? '' : ' (ei muutoksia)'}.`);
-// Workflow tallentaa games.json:n repoon vain, kun pelit muuttuivat (pelkkä aikaleima ei riitä).
+const teamLists = Object.fromEntries(Object.entries(teams).map(([k, s]) => [k, [...s].sort((a, b) => a.localeCompare(b, 'fi'))]));
+const changed = JSON.stringify([games, teamLists]) !== JSON.stringify([old.games, old.teams]);
+await writeFile(OUT, JSON.stringify({ updated: now.toISOString(), failed, teams: teamLists, games }, null, 1) + '\n');
+console.log(`Yhteensä ${games.length} peliä; joukkueita: ${Object.entries(teamLists).map(([k, v]) => `${k} ${v.length}`).join(', ')}${changed ? '' : ' (ei muutoksia)'}.`);
+// Workflow tallentaa games.json:n repoon vain, kun sisältö muuttui (pelkkä aikaleima ei riitä).
 if (process.env.GITHUB_OUTPUT) await writeFile(process.env.GITHUB_OUTPUT, `changed=${changed}\n`, { flag: 'a' });

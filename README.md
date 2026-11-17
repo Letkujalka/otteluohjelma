@@ -12,22 +12,28 @@ pelit ja palvelun, josta pelin näkee: MTV Katsomo, Disney+ tai Yle
 ## Toiminta
 
 - **Välilehdet:** Tänään, Huomenna, Viikko (tänään + 6 päivää päivittäin
-  ryhmiteltynä) ja Myöhemmin (noin 3 viikkoa eteenpäin). Tänään-välilehden
-  lopussa ovat eilisen tulokset.
+  ryhmiteltynä) ja Myöhemmin (noin 3 viikkoa eteenpäin). Välilehteä vaihdetaan
+  pyyhkäisemällä sivuttain tai napauttamalla. Tänään-välilehden lopussa ovat
+  eilisen tulokset.
 - **Ottelukortti:** kellonaika (Suomen aikaa), sarja, joukkueet (suosikki
   lihavoituna) ja palvelu. Palvelunappi avaa palvelun. Käynnissä olevassa
   pelissä näkyy LIVE ja tilanne, päättyneessä lopputulos.
-- **Vaihda:** jos palvelu on väärin, kortin "Vaihda"-linkistä valitaan oikea
-  palvelu koko sarjalle tai vain yhdelle joukkueelle.
-- **Asetukset (⚙):** suosikkien piilotus, Mestarien liigan kaikkien
-  otteluiden näyttö ja sarjakohtaiset palvelut.
-  Asetukset tallentuvat vain puhelimeen.
+- **Vaihda:** jos palvelu on väärin, kortin "Vaihda"-linkistä valitaan sarjalle
+  oikea palvelu.
+- **Asetukset (⚙):** suosikit valitaan kategorioittain (Mestarien liiga,
+  LaLiga, Liiga, Maajoukkueet) kategorian joukkuelistasta. Suosikin kaikki
+  pelit näkyvät, myös muissa sarjoissa. Kategoriassa voi lisäksi valita
+  "Näytä kaikki ottelut" (oletuksena päällä Mestarien liigassa). Oletussuosikit:
+  SaiPa, Real Madrid, FC Barcelona, Suomi (myös U21 ja U19), Espanja, Ranska ja
+  Englanti. Asetukset tallentuvat vain puhelimeen.
 
 ## Mistä pelit tulevat
 
 GitHub Actions ajaa `scripts/fetch-games.mjs`-skriptin kahden tunnin välein.
-Skripti hakee pelit ja kirjoittaa ne tiedostoon `games.json`, jonka sovellus
-lataa.
+Skripti hakee kategorioiden kaikki pelit ja joukkuelistat ja kirjoittaa ne
+tiedostoon `games.json`, jonka sovellus lataa ja suodattaa suosikkien mukaan.
+Ystävyysotteluista ja Copa del Reystä otetaan vain pelit, joissa on kategorian
+tuttu joukkue.
 
 - **Jalkapallo:** ESPN:n avoin otteluohjelma (`site.api.espn.com`).
 - **Suomen U21 ja U19:** UEFA:n otteluohjelma (`match.uefa.com`), EM-kisat ja
@@ -50,11 +56,14 @@ päätellään sarjasta (`config.json`). Oletukset kaudelle 2026–27:
 
 Muokkaa tiedostoa `config.json`:
 
-- `teams`: joukkueet. `match` sisältää nimet, joilla joukkue löytyy
-  lähteestä (ESPN englanniksi, esim. "Bayern Munich"; Liiga suomeksi).
-- `competitions`: sarjat. `slug` on ESPN:n sarjatunnus (esim. `esp.1`,
-  `uefa.champions`). `all: true` näyttää sarjan kaikki ottelut.
+- `categories`: kategoriat, niiden oletussuosikit (`defaults`, nimet suomeksi
+  kuten sovelluksessa) ja `all` (näytä oletuksena kaikki ottelut).
+- `competitions`: sarjat ja niiden kategoria (`cat`). `slug` on ESPN:n
+  sarjatunnus (esim. `esp.1`, `uefa.champions`); `teams: true` hakee sarjan
+  joukkuelistan. Nuorten sarjoissa (`source: uefa`) `teams` rajaa joukkueet.
+- `teamServices`: joukkueen palvelu, joka ohittaa sarjan palvelun.
 - `services`: palvelut, niiden linkit ja värit.
+- `names`: lähteiden nimien suomennokset.
 
 Muutos julkaistaan, kun se tallennetaan `main`-haaraan. Pelit voi hakea heti
 kohdasta Actions → Otteluohjelma GitHub Pagesiin → Run workflow.

@@ -1,96 +1,91 @@
 {
-  "_ohje": "Suosikkijoukkueet ja sarjat. match = nimet, joilla joukkue löytyy lähteestä (ESPN ja UEFA englanniksi, Liiga suomeksi). service = palvelu, jossa sarjan pelit näkyvät Suomessa; joukkueen service ohittaa sarjan palvelun. all: true = sarjan kaikki ottelut, ei vain suosikkien.",
-  "teams": [
+  "_ohje": "Kategoriat ja niiden sarjat. Haku tuo kategorioiden kaikki pelit; sovelluksessa valitaan suosikit. defaults = oletussuosikit (nimet suomeksi, kuten sovelluksessa), all = näytä oletuksena kategorian kaikki ottelut. teamServices = joukkueen palvelu, joka ohittaa sarjan palvelun. names = lähteiden nimien suomennokset.",
+  "categories": [
     {
-      "id": "saipa",
-      "name": "SaiPa",
-      "sport": "hockey",
-      "match": [
-        "SaiPa"
-      ]
+      "id": "ucl",
+      "name": "Mestarien liiga",
+      "sport": "soccer",
+      "all": true,
+      "defaults": []
     },
     {
-      "id": "real",
-      "name": "Real Madrid",
+      "id": "laliga",
+      "name": "LaLiga",
       "sport": "soccer",
-      "match": [
-        "Real Madrid"
-      ]
-    },
-    {
-      "id": "barca",
-      "name": "FC Barcelona",
-      "sport": "soccer",
-      "match": [
-        "Barcelona",
+      "defaults": [
+        "Real Madrid",
         "FC Barcelona"
       ]
     },
     {
-      "id": "espanja",
-      "name": "Espanja",
-      "sport": "soccer",
-      "national": true,
-      "match": [
-        "Spain"
+      "id": "liiga",
+      "name": "Liiga",
+      "sport": "hockey",
+      "defaults": [
+        "SaiPa"
       ]
     },
     {
-      "id": "ranska",
-      "name": "Ranska",
+      "id": "national",
+      "name": "Maajoukkueet",
       "sport": "soccer",
-      "national": true,
-      "match": [
-        "France"
+      "defaults": [
+        "Suomi",
+        "Suomi U21",
+        "Suomi U19",
+        "Espanja",
+        "Ranska",
+        "Englanti"
       ]
-    },
-    {
-      "id": "suomi",
-      "name": "Huuhkajat",
-      "sport": "soccer",
-      "national": true,
-      "match": [
-        "Finland"
-      ],
-      "service": "Yle"
-    },
-    {
-      "id": "englanti",
-      "name": "Englanti",
-      "sport": "soccer",
-      "national": true,
-      "match": [
-        "England"
-      ]
-    },
-    {
-      "id": "suomi_u21",
-      "name": "Suomi U21",
-      "sport": "soccer",
-      "national": true,
-      "match": [
-        "Finland"
-      ],
-      "source": "uefa",
-      "age": 21,
-      "service": "Yle"
-    },
-    {
-      "id": "suomi_u19",
-      "name": "Suomi U19",
-      "sport": "soccer",
-      "national": true,
-      "match": [
-        "Finland"
-      ],
-      "source": "uefa",
-      "age": 19,
-      "service": "Yle"
     }
   ],
   "competitions": [
     {
+      "id": "ucl",
+      "cat": "ucl",
+      "name": "Mestarien liiga",
+      "source": "espn",
+      "slug": "uefa.champions",
+      "teams": true,
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "uefasuper",
+      "cat": "ucl",
+      "name": "UEFA Superkup",
+      "source": "espn",
+      "slug": "uefa.super_cup",
+      "service": "MTV Katsomo"
+    },
+    {
+      "id": "laliga",
+      "cat": "laliga",
+      "name": "LaLiga",
+      "source": "espn",
+      "slug": "esp.1",
+      "teams": true,
+      "service": "Disney+"
+    },
+    {
+      "id": "copa",
+      "cat": "laliga",
+      "name": "Copa del Rey",
+      "source": "espn",
+      "slug": "esp.copa_del_rey",
+      "service": "Disney+",
+      "onlyKnown": true
+    },
+    {
+      "id": "supercopa",
+      "cat": "laliga",
+      "name": "Supercopa",
+      "source": "espn",
+      "slug": "esp.super_cup",
+      "service": "Disney+"
+    },
+    {
       "id": "liiga",
+      "cat": "liiga",
       "name": "Liiga",
       "source": "liiga",
       "tournaments": [
@@ -100,50 +95,17 @@
       "service": "MTV Katsomo"
     },
     {
-      "id": "laliga",
-      "name": "LaLiga",
-      "source": "espn",
-      "slug": "esp.1",
-      "service": "Disney+"
-    },
-    {
-      "id": "copa",
-      "name": "Copa del Rey",
-      "source": "espn",
-      "slug": "esp.copa_del_rey",
-      "service": "Disney+"
-    },
-    {
-      "id": "supercopa",
-      "name": "Supercopa",
-      "source": "espn",
-      "slug": "esp.super_cup",
-      "service": "Disney+"
-    },
-    {
-      "id": "ucl",
-      "name": "Mestarien liiga",
-      "source": "espn",
-      "slug": "uefa.champions",
-      "service": "MTV Katsomo",
-      "all": true
-    },
-    {
-      "id": "uefasuper",
-      "name": "UEFA Superkup",
-      "source": "espn",
-      "slug": "uefa.super_cup",
-      "service": "MTV Katsomo"
-    },
-    {
       "id": "nations",
+      "cat": "national",
       "name": "Kansojen liiga",
       "source": "espn",
       "slug": "uefa.nations",
+      "teams": true,
       "service": "MTV Katsomo"
     },
     {
       "id": "wcq",
+      "cat": "national",
       "name": "MM-karsinta",
       "source": "espn",
       "slug": "fifa.worldq.uefa",
@@ -151,6 +113,7 @@
     },
     {
       "id": "euroq",
+      "cat": "national",
       "name": "EM-karsinta",
       "source": "espn",
       "slug": "uefa.euroq",
@@ -158,6 +121,7 @@
     },
     {
       "id": "euro",
+      "cat": "national",
       "name": "EM-kisat",
       "source": "espn",
       "slug": "uefa.euro",
@@ -165,26 +129,41 @@
     },
     {
       "id": "friendly",
+      "cat": "national",
       "name": "Maaottelu",
       "source": "espn",
       "slug": "fifa.friendly",
-      "service": "?"
+      "service": "?",
+      "onlyKnown": true
     },
     {
       "id": "u21",
+      "cat": "national",
       "name": "U21-EM",
       "source": "uefa",
       "age": 21,
+      "teams": [
+        "Finland"
+      ],
       "service": "Yle"
     },
     {
       "id": "u19",
+      "cat": "national",
       "name": "U19-EM",
       "source": "uefa",
       "age": 19,
+      "teams": [
+        "Finland"
+      ],
       "service": "Yle"
     }
   ],
+  "teamServices": {
+    "Suomi": "Yle",
+    "Suomi U21": "Yle",
+    "Suomi U19": "Yle"
+  },
   "services": {
     "MTV Katsomo": {
       "url": "https://www.mtv.fi/",
@@ -258,6 +237,11 @@
     "Mexico": "Meksiko",
     "Japan": "Japani",
     "Morocco": "Marokko",
-    "Bayern Munich": "Bayern München"
+    "Barcelona": "FC Barcelona",
+    "Bayern Munich": "Bayern München",
+    "Inter Milan": "Inter",
+    "Internazionale": "Inter",
+    "AC Milan": "AC Milan",
+    "Juventus": "Juventus"
   }
 }
