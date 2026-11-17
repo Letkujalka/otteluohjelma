@@ -28,7 +28,10 @@ const ymd = d => d.toISOString().slice(0, 10).replace(/-/g, '');
 
 async function getJson(url) {
   const res = await fetch(url, { headers: { 'User-Agent': 'otteluohjelma/1.0', Accept: 'application/json' } });
-  if (!res.ok) throw new Error(`${res.status} ${url}`);
+  if (!res.ok) {
+    const body = (await res.text().catch(() => '')).slice(0, 160).replace(/\s+/g, ' ');
+    throw new Error(`${res.status} ${url}${body ? ' – ' + body : ''}`);
+  }
   return res.json();
 }
 
@@ -44,10 +47,24 @@ function displayName(name, fav) {
 /* ---------- ESPN (jalkapallo) ---------- */
 
 async function fetchEspn(comp) {
-  const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${comp.slug}/scoreboard?dates=${ymd(from)}-${ymd(to)}&limit=1000`;
-  const data = await getJson(url);
+  const base = `https://site.api.espn.com/apis/site/v2/sports/soccer/${comp.slug}/scoreboard`;
+  let events;
+  try {
+    // Ensin koko aikaväli yhdellä haulla.
+    events = (await getJson(`${base}?dates=${ymd(from)}-${ymd(to)}`)).events || [];
+  } catch (e) {
+    // ESPN ei aina hyväksy aikaväliä: haetaan päivä kerrallaan.
+    console.log(`  ${comp.name}: aikaväli ei käy (${e.message.slice(0, 60)}…), haetaan päivittäin`);
+    events = [];
+    let ok = 0, lastErr;
+    for (let d = new Date(from); d <= to; d = new Date(d.getTime() + 864e5)) {
+      try { events.push(...((await getJson(`${base}?dates=${ymd(d)}`)).events || [])); ok++; }
+      catch (err) { lastErr = err; }
+    }
+    if (!ok) throw lastErr;
+  }
   const games = [];
-  for (const ev of data.events || []) {
+  for (const ev of events) {
     const c = (ev.competitions || [])[0];
     if (!c) continue;
     const home = c.competitors.find(x => x.homeAway === 'home') || c.competitors[0];
