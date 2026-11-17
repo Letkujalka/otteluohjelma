@@ -164,3 +164,15 @@ details.cat > label { display: block; }
 .teamlist { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6px; }
 .teamlist .opt { padding: 10px; font-size: .95rem; }
 @media (max-width: 340px) { .teamlist { grid-template-columns: 1fr; } }
+
+/* Muut kuin suosikkien pelit: tiivis rivi */
+.game.other {
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px; margin-bottom: 6px;
+  background: transparent; border: 1px solid var(--card2);
+}
+.game.other .o-time { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 44px; font-size: .95rem; }
+.game.other .o-teams { flex: 1; min-width: 0; color: var(--muted); font-size: .95rem; }
+.game.other .o-teams b { color: var(--text); }
+.game.other .o-teams small { display: block; font-size: .78rem; opacity: .8; }
+.svc.mini { padding: 4px 9px; font-size: .8rem; flex: none; }
+.game.other.in { outline: 1px solid var(--miss); }

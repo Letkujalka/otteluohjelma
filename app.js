@@ -5,7 +5,7 @@
    maajoukkueet) kaikki pelit; tässä ne suodatetaan suosikkien mukaan.
    Omat asetukset tallennetaan selaimen localStorageen (avain KEY). */
 
-const APP_VERSION = '3';
+const APP_VERSION = '4';
 const KEY = 'otteluohjelma.v2';
 const OLD_KEY = 'otteluohjelma.v1';
 const TZ = 'Europe/Helsinki';
@@ -126,6 +126,16 @@ function gameCard(g, favs) {
   const svcTag = info.url
     ? `<a class="svc" style="--svc:${info.color}" href="${esc(info.url)}" target="_blank" rel="noopener">▶ ${esc(svcLabel(svc))}</a>`
     : `<span class="svc" style="--svc:${info.color}">${svc === '?' ? 'Palvelu ei tiedossa' : esc(svcLabel(svc))}</span>`;
+  // Muut kuin suosikkien pelit (esim. UCL:n kaikki ottelut) tiiviinä rivinä.
+  if (!favs.has(g.home) && !favs.has(g.away)) {
+    const score = g.state !== 'pre' && g.homeScore != null && !Number.isNaN(g.homeScore) ? ` <b>${g.homeScore}–${g.awayScore}</b>` : '';
+    const t = g.state === 'in' ? '<span class="live">LIVE</span>' : g.state === 'post' ? '<span class="muted">Loppu</span>' : fmtTime(g.start);
+    return `<div class="card game other ${g.state}">
+      <span class="o-time">${t}</span>
+      <span class="o-teams">${esc(g.home)} – ${esc(g.away)}${score}<small>${esc(g.compName)}${g.round ? ' · ' + esc(g.round) : ''}</small></span>
+      ${info.url ? `<a class="svc mini" style="--svc:${info.color}" href="${esc(info.url)}" target="_blank" rel="noopener" title="${esc(svcLabel(svc))}">▶</a>` : ''}
+    </div>`;
+  }
   return `<div class="card game ${g.state}">
     <div class="g-head">${when}<span class="comp">${g.cat === 'liiga' ? '🏒' : '⚽'} ${esc(g.compName)}${g.round ? ' · ' + esc(g.round) : ''}</span></div>
     <div class="teams">${team(g.home, g.homeScore)}${team(g.away, g.awayScore)}</div>
