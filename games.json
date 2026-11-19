@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-19T15:37:23.360Z",
+ "updated": "2026-11-19T16:01:28.202Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -81,7 +81,32 @@
    "TPS",
    "Ässät"
   ],
-  "veikkausliiga": [],
+  "veikkausliiga": [
+   "AFC Wimbledon",
+   "Barnsley",
+   "Blackpool",
+   "Bradford City",
+   "Bromley",
+   "Burton Albion",
+   "Cambridge United",
+   "Doncaster Rovers",
+   "Huddersfield Town",
+   "Leicester City",
+   "Leyton Orient",
+   "Luton Town",
+   "Mansfield Town",
+   "Milton Keynes Dons",
+   "Notts County",
+   "Oxford United",
+   "Peterborough United",
+   "Plymouth Argyle",
+   "Reading",
+   "Sheffield Wednesday",
+   "Stevenage",
+   "Stockport County",
+   "Wigan Athletic",
+   "Wycombe Wanderers"
+  ],
   "national": [
    "Alankomaat",
    "Albania",
