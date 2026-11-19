@@ -36,6 +36,8 @@ Ystävyysotteluista ja Copa del Reystä otetaan vain pelit, joissa on kategorian
 tuttu joukkue.
 
 - **Jalkapallo:** ESPN:n avoin otteluohjelma (`site.api.espn.com`).
+- **Veikkausliiga:** TheSportsDB (`thesportsdb.com`, ilmaisavain), sillä ESPN ei
+  enää tarjoa sarjaa. Pelit haetaan päivä kerrallaan.
 - **Suomen U21 ja U19:** UEFA:n otteluohjelma (`match.uefa.com`), EM-kisat ja
   niiden karsinnat.
 - **Liiga:** liiga.fi:n otteluohjelma (`liiga.fi/api/v2/games`).
