@@ -75,10 +75,19 @@ async function espnTeams(comp) {
       const groups = d.children || [d];
       return groups.flatMap(g => g.standings?.entries || []).map(e => e.team?.displayName).filter(Boolean);
     }],
-    ['kuluneen vuoden ottelut', async () => {
-      const y = now.getUTCFullYear();
-      const d = await getJson(`${espn}/site/v2/sports/soccer/${comp.slug}/scoreboard?dates=${y}0101-${y}1231&limit=1000`);
-      return (d.events || []).flatMap(ev => (ev.competitions?.[0]?.competitors || []).map(c => c.team?.displayName)).filter(Boolean);
+    // Kauden ulkopuolella: kuluneen kauden ottelut, yksi päivä viikossa huhti–lokakuussa
+    // (ESPN ei hyväksy aikaväliä). Vain, jos listaa ei ole jo tallessa.
+    ['kuluneen kauden ottelut', async () => {
+      if (teams[comp.cat].size) return [...teams[comp.cat]];
+      const out = [];
+      const y = now.getUTCMonth() >= 3 ? now.getUTCFullYear() : now.getUTCFullYear() - 1;
+      for (let d = new Date(Date.UTC(y, 3, 1)); d < new Date(Date.UTC(y, 10, 1)); d = new Date(d.getTime() + 7 * 864e5)) {
+        try {
+          const r = await getJson(`${espn}/site/v2/sports/soccer/${comp.slug}/scoreboard?dates=${ymd(d)}`);
+          for (const ev of r.events || []) for (const c of ev.competitions?.[0]?.competitors || []) if (c.team?.displayName) out.push(c.team.displayName);
+        } catch { /* yksittäinen päivä */ }
+      }
+      return out;
     }],
   ];
   for (const [what, fn] of tries) {
