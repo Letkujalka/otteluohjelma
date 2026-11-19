@@ -62,15 +62,39 @@ function game(comp, id, start, home, away, state, hs, as, detail, round = '') {
 
 /* ---------- ESPN (jalkapallo) ---------- */
 
+// Joukkuelista: ensin sarjan joukkueet, tauolla (esim. Veikkausliiga talvella)
+// sarjataulukko tai kuluneen vuoden ottelut.
 async function espnTeams(comp) {
-  try {
-    const data = await getJson(`https://site.api.espn.com/apis/site/v2/sports/soccer/${comp.slug}/teams`);
-    const list = data.sports?.[0]?.leagues?.[0]?.teams || [];
-    for (const t of list) teams[comp.cat].add(fiName(t.team.displayName));
-    console.log(`  ${comp.name}: ${list.length} joukkuetta`);
-  } catch (e) {
-    console.warn(`  ${comp.name}: joukkuelista ei onnistunut (${e.message.slice(0, 80)})`);
+  const names = new Set();
+  const espn = 'https://site.api.espn.com/apis';
+  const tries = [
+    ['joukkueet', async () => (await getJson(`${espn}/site/v2/sports/soccer/${comp.slug}/teams`))
+      .sports?.[0]?.leagues?.[0]?.teams?.map(t => t.team.displayName) || []],
+    ['sarjataulukko', async () => {
+      const d = await getJson(`${espn}/v2/sports/soccer/${comp.slug}/standings`);
+      const groups = d.children || [d];
+      return groups.flatMap(g => g.standings?.entries || []).map(e => e.team?.displayName).filter(Boolean);
+    }],
+    ['kuluneen vuoden ottelut', async () => {
+      const y = now.getUTCFullYear();
+      const d = await getJson(`${espn}/site/v2/sports/soccer/${comp.slug}/scoreboard?dates=${y}0101-${y}1231&limit=1000`);
+      return (d.events || []).flatMap(ev => (ev.competitions?.[0]?.competitors || []).map(c => c.team?.displayName)).filter(Boolean);
+    }],
+  ];
+  for (const [what, fn] of tries) {
+    try {
+      const list = await fn();
+      if (list.length) {
+        for (const n of list) names.add(fiName(n));
+        console.log(`  ${comp.name}: ${names.size} joukkuetta (${what})`);
+        break;
+      }
+      console.log(`  ${comp.name}: ${what}: ei joukkueita`);
+    } catch (e) {
+      console.warn(`  ${comp.name}: ${what} ei onnistunut (${e.message.slice(0, 80)})`);
+    }
   }
+  for (const n of names) teams[comp.cat].add(n);
 }
 
 async function fetchEspn(comp) {
