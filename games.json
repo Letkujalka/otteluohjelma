@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-19T16:04:51.692Z",
+ "updated": "2026-11-19T20:47:59.452Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -406,9 +406,9 @@
    "round": "",
    "home": "Tappara",
    "away": "Sport",
-   "homeScore": null,
-   "awayScore": null,
-   "state": "pre",
+   "homeScore": 2,
+   "awayScore": 3,
+   "state": "post",
    "detail": "",
    "service": "MTV Katsomo"
   },
