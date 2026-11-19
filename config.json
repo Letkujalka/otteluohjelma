@@ -104,10 +104,10 @@
       "id": "veikkausliiga",
       "cat": "veikkausliiga",
       "name": "Veikkausliiga",
-      "source": "espn",
-      "slug": "fin.1",
-      "teams": true,
-      "service": "Ruutu+"
+      "source": "sportsdb",
+      "service": "Ruutu+",
+      "country": "Finland",
+      "league": "Veikkausliiga"
     },
     {
       "id": "nations",

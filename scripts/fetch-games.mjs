@@ -2,8 +2,8 @@
 // ja kirjoittaa ne tiedostoon games.json. Sovellus suodattaa pelit käyttäjän
 // suosikkien mukaan.
 // Ajetaan GitHub Actionsissa (ks. .github/workflows/pages.yml), Node 20+.
-// Lähteet: ESPN:n avoin otteluohjelma (jalkapallo), UEFA:n otteluohjelma
-// (nuorten maajoukkueet) ja liiga.fi (jääkiekko).
+// Lähteet: ESPN:n avoin otteluohjelma (jalkapallo), TheSportsDB (Veikkausliiga),
+// UEFA:n otteluohjelma (nuorten maajoukkueet) ja liiga.fi (jääkiekko).
 // Jos lähde ei vastaa, sen edelliset pelit pidetään tallessa.
 //
 // Käyttö: node scripts/fetch-games.mjs [--days 21]
@@ -147,6 +147,40 @@ async function fetchEspn(comp) {
   return games;
 }
 
+/* ---------- TheSportsDB (Veikkausliiga) ---------- */
+
+// Avoin TheSportsDB-rajapinta (ilmaisavain 123). Sarja etsitään nimellä.
+const SDB = 'https://www.thesportsdb.com/api/v1/json/123';
+async function fetchSportsDb(comp) {
+  const leagues = (await getJson(`${SDB}/search_all_leagues.php?c=${encodeURIComponent(comp.country)}&s=Soccer`)).countries || [];
+  const league = leagues.find(l => [l.strLeague, l.strLeagueAlternate].some(n => n && n.toLowerCase().includes(comp.league.toLowerCase())));
+  if (!league) throw new Error(`sarjaa ${comp.league} ei löytynyt (${leagues.map(l => l.strLeague).join(', ')})`);
+  const tl = (await getJson(`${SDB}/lookup_all_teams.php?id=${league.idLeague}`)).teams || [];
+  for (const t of tl) teams[comp.cat].add(fiName(t.strTeam));
+  // Kausi on kalenterivuosi; joulukuun ajoissa mukaan seuraavan vuoden alku.
+  const seasons = [...new Set([from.getUTCFullYear(), to.getUTCFullYear()])];
+  const events = [];
+  for (const y of seasons) {
+    try { events.push(...((await getJson(`${SDB}/eventsseason.php?id=${league.idLeague}&s=${y}`)).events || [])); }
+    catch (e) { console.warn(`  ${comp.name} ${y}: ${e.message.slice(0, 80)}`); }
+  }
+  console.log(`  ${comp.name}: sarja ${league.strLeague} (${league.idLeague}), ${tl.length} joukkuetta, ${events.length} ottelua kaudelta`);
+  const games = [];
+  for (const ev of events) {
+    // Ajat ovat UTC:tä; aikavyöhyke lisätään, jos se puuttuu.
+    const raw = ev.strTimestamp || `${ev.dateEvent}T${ev.strTime || '12:00:00'}`;
+    const start = new Date(/(Z|[+-]\d\d:?\d\d)$/.test(raw) ? raw : raw + 'Z');
+    if (!(start >= from && start <= to)) continue;
+    const home = fiName(ev.strHomeTeam), away = fiName(ev.strAwayTeam);
+    teams[comp.cat].add(home); teams[comp.cat].add(away);
+    const st = String(ev.strStatus || '');
+    const state = /FT|AET|PEN|Match Finished/i.test(st) ? 'post' : /1H|2H|HT|LIVE|ET/i.test(st) ? 'in' : 'pre';
+    games.push(game(comp, `sdb-${ev.idEvent}`, start.toISOString(), home, away, state,
+      ev.intHomeScore == null ? null : Number(ev.intHomeScore), ev.intAwayScore == null ? null : Number(ev.intAwayScore), state === 'in' ? st : ''));
+  }
+  return games;
+}
+
 /* ---------- UEFA (nuorten maajoukkueet) ---------- */
 
 // match.uefa.com on uefa.comin oma otteluohjelma. Haetaan kaikki aikavälin
@@ -225,7 +259,8 @@ const failed = [];
 for (const comp of cfg.competitions) {
   try {
     const games = comp.source === 'liiga' ? await fetchLiiga(comp)
-      : comp.source === 'uefa' ? await fetchUefa(comp) : await fetchEspn(comp);
+      : comp.source === 'uefa' ? await fetchUefa(comp)
+      : comp.source === 'sportsdb' ? await fetchSportsDb(comp) : await fetchEspn(comp);
     console.log(`${comp.name}: ${games.length} peliä`);
     all.push(...games);
   } catch (e) {
