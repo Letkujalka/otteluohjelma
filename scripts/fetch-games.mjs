@@ -175,7 +175,6 @@ async function fetchSportsDb(comp) {
   } catch (e) { console.warn(`  ${comp.name}: joukkuehaku ei onnistunut (${e.message.slice(0, 80)})`); }
   // Lisäksi joukkueet kuluneen kauden otteluista.
   for (const y of [now.getUTCFullYear(), now.getUTCFullYear() - 1]) {
-    if (teams[comp.cat].size >= 10) break;
     try {
       const evs = ((await sdb(`eventsseason.php?id=${league.idLeague}&s=${y}`)).events || []).filter(inLeague);
       for (const ev of evs) { teams[comp.cat].add(fiName(ev.strHomeTeam)); teams[comp.cat].add(fiName(ev.strAwayTeam)); }
