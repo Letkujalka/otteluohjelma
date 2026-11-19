@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-19T16:03:03.129Z",
+ "updated": "2026-11-19T16:04:51.692Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -83,15 +83,19 @@
   ],
   "veikkausliiga": [
    "AC Oulu",
+   "FC Haka",
+   "FC Inter",
+   "FC Lahti",
    "Gnistan",
-   "HJK Helsinki",
+   "HJK",
    "IFK Mariehamn",
    "Ilves",
-   "Inter Turku",
    "Jaro",
+   "KTP",
    "KuPS",
-   "Lahti",
-   "SJK Seinajoki"
+   "SJK",
+   "TPS",
+   "VPS"
   ],
   "national": [
    "Alankomaat",
