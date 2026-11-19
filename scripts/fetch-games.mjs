@@ -149,35 +149,62 @@ async function fetchEspn(comp) {
 
 /* ---------- TheSportsDB (Veikkausliiga) ---------- */
 
-// Avoin TheSportsDB-rajapinta (ilmaisavain 123). Sarja etsitään nimellä.
+// Avoin TheSportsDB-rajapinta (ilmaisavain 123, enintään 30 hakua minuutissa).
+// Ilmaisavaimella osa hauista palauttaa esimerkkidataa, joten jokaisesta
+// tuloksesta tarkistetaan, että se kuuluu oikeaan sarjaan.
 const SDB = 'https://www.thesportsdb.com/api/v1/json/123';
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function sdb(path) {
+  await sleep(2100);
+  return getJson(`${SDB}/${path}`);
+}
+
 async function fetchSportsDb(comp) {
-  const leagues = (await getJson(`${SDB}/search_all_leagues.php?c=${encodeURIComponent(comp.country)}&s=Soccer`)).countries || [];
+  const leagues = (await sdb(`search_all_leagues.php?c=${encodeURIComponent(comp.country)}&s=Soccer`)).countries || [];
   const league = leagues.find(l => [l.strLeague, l.strLeagueAlternate].some(n => n && n.toLowerCase().includes(comp.league.toLowerCase())));
   if (!league) throw new Error(`sarjaa ${comp.league} ei löytynyt (${leagues.map(l => l.strLeague).join(', ')})`);
-  const tl = (await getJson(`${SDB}/lookup_all_teams.php?id=${league.idLeague}`)).teams || [];
-  for (const t of tl) teams[comp.cat].add(fiName(t.strTeam));
-  // Kausi on kalenterivuosi; joulukuun ajoissa mukaan seuraavan vuoden alku.
-  const seasons = [...new Set([from.getUTCFullYear(), to.getUTCFullYear()])];
-  const events = [];
-  for (const y of seasons) {
-    try { events.push(...((await getJson(`${SDB}/eventsseason.php?id=${league.idLeague}&s=${y}`)).events || [])); }
-    catch (e) { console.warn(`  ${comp.name} ${y}: ${e.message.slice(0, 80)}`); }
+  const inLeague = x => String(x.idLeague) === String(league.idLeague);
+
+  // Joukkuelista tehdään joka kerta alusta (vanhassa listassa voi olla esimerkkidataa).
+  const prev = new Set(teams[comp.cat]);
+  teams[comp.cat].clear();
+  try {
+    const tl = ((await sdb(`search_all_teams.php?l=${encodeURIComponent(league.strLeague)}`)).teams || []).filter(inLeague);
+    for (const t of tl) teams[comp.cat].add(fiName(t.strTeam));
+    console.log(`  ${comp.name}: joukkuehaku ${tl.length}`);
+  } catch (e) { console.warn(`  ${comp.name}: joukkuehaku ei onnistunut (${e.message.slice(0, 80)})`); }
+  // Lisäksi joukkueet kuluneen kauden otteluista.
+  for (const y of [now.getUTCFullYear(), now.getUTCFullYear() - 1]) {
+    if (teams[comp.cat].size >= 10) break;
+    try {
+      const evs = ((await sdb(`eventsseason.php?id=${league.idLeague}&s=${y}`)).events || []).filter(inLeague);
+      for (const ev of evs) { teams[comp.cat].add(fiName(ev.strHomeTeam)); teams[comp.cat].add(fiName(ev.strAwayTeam)); }
+      console.log(`  ${comp.name}: kauden ${y} otteluita ${evs.length}`);
+    } catch (e) { console.warn(`  ${comp.name} ${y}: ${e.message.slice(0, 80)}`); }
   }
-  console.log(`  ${comp.name}: sarja ${league.strLeague} (${league.idLeague}), ${tl.length} joukkuetta, ${events.length} ottelua kaudelta`);
+
+  // Pelit päivä kerrallaan.
   const games = [];
-  for (const ev of events) {
-    // Ajat ovat UTC:tä; aikavyöhyke lisätään, jos se puuttuu.
-    const raw = ev.strTimestamp || `${ev.dateEvent}T${ev.strTime || '12:00:00'}`;
-    const start = new Date(/(Z|[+-]\d\d:?\d\d)$/.test(raw) ? raw : raw + 'Z');
-    if (!(start >= from && start <= to)) continue;
-    const home = fiName(ev.strHomeTeam), away = fiName(ev.strAwayTeam);
-    teams[comp.cat].add(home); teams[comp.cat].add(away);
-    const st = String(ev.strStatus || '');
-    const state = /FT|AET|PEN|Match Finished/i.test(st) ? 'post' : /1H|2H|HT|LIVE|ET/i.test(st) ? 'in' : 'pre';
-    games.push(game(comp, `sdb-${ev.idEvent}`, start.toISOString(), home, away, state,
-      ev.intHomeScore == null ? null : Number(ev.intHomeScore), ev.intAwayScore == null ? null : Number(ev.intAwayScore), state === 'in' ? st : ''));
+  let days = 0;
+  for (let d = new Date(from); d <= to; d = new Date(d.getTime() + 864e5)) {
+    let evs;
+    try { evs = (await sdb(`eventsday.php?d=${d.toISOString().slice(0, 10)}&l=${league.idLeague}`)).events || []; days++; }
+    catch (e) { console.warn(`  ${comp.name} ${d.toISOString().slice(0, 10)}: ${e.message.slice(0, 60)}`); continue; }
+    for (const ev of evs.filter(inLeague)) {
+      // Ajat ovat UTC:tä; aikavyöhyke lisätään, jos se puuttuu.
+      const raw = ev.strTimestamp || `${ev.dateEvent}T${ev.strTime || '12:00:00'}`;
+      const start = new Date(/(Z|[+-]\d\d:?\d\d)$/.test(raw) ? raw : raw + 'Z');
+      const home = fiName(ev.strHomeTeam), away = fiName(ev.strAwayTeam);
+      teams[comp.cat].add(home); teams[comp.cat].add(away);
+      const st = String(ev.strStatus || '');
+      const state = /FT|AET|PEN|Match Finished/i.test(st) ? 'post' : /1H|2H|HT|LIVE|ET/i.test(st) ? 'in' : 'pre';
+      games.push(game(comp, `sdb-${ev.idEvent}`, start.toISOString(), home, away, state,
+        ev.intHomeScore == null ? null : Number(ev.intHomeScore), ev.intAwayScore == null ? null : Number(ev.intAwayScore), state === 'in' ? st : ''));
+    }
   }
+  console.log(`  ${comp.name}: sarja ${league.strLeague} (${league.idLeague}), ${teams[comp.cat].size} joukkuetta, ${days} päivää haettu`);
+  if (!teams[comp.cat].size) for (const n of prev) teams[comp.cat].add(n);
+  if (!days) throw new Error('päivähaku ei onnistunut');
   return games;
 }
 
