@@ -21,7 +21,7 @@ pelit ja palvelun, josta pelin näkee: MTV Katsomo, Disney+ tai Yle
 - **Vaihda:** jos palvelu on väärin, kortin "Vaihda"-linkistä valitaan sarjalle
   oikea palvelu.
 - **Asetukset (⚙):** suosikit valitaan kategorioittain (Mestarien liiga,
-  LaLiga, Liiga, Maajoukkueet) kategorian joukkuelistasta. Suosikin kaikki
+  LaLiga, Liiga, Veikkausliiga, Maajoukkueet) kategorian joukkuelistasta. Suosikin kaikki
   pelit näkyvät, myös muissa sarjoissa. Kategoriassa voi lisäksi valita
   "Näytä kaikki ottelut" (oletuksena päällä Mestarien liigassa). Oletussuosikit:
   SaiPa, Real Madrid, FC Barcelona, Suomi (myös U21 ja U19), Espanja, Ranska ja
@@ -48,6 +48,7 @@ päätellään sarjasta (`config.json`). Oletukset kaudelle 2026–27:
 | Liiga | MTV Katsomo |
 | LaLiga, Copa del Rey, Supercopa | Disney+ |
 | Mestarien liiga (kaikki ottelut) | MTV Katsomo |
+| Veikkausliiga | Ruutu+ |
 | Muiden maajoukkueiden karsinnat ja Kansojen liiga | MTV Katsomo |
 | Huuhkajat, Suomi U21 ja U19 | Yle (Areena, TV1, TV2) |
 | Maaottelut (ystävyysottelut) | ei tiedossa |

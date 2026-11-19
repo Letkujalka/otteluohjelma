@@ -5,7 +5,7 @@
    maajoukkueet) kaikki pelit; tässä ne suodatetaan suosikkien mukaan.
    Omat asetukset tallennetaan selaimen localStorageen (avain KEY). */
 
-const APP_VERSION = '4';
+const APP_VERSION = '5';
 const KEY = 'otteluohjelma.v2';
 const OLD_KEY = 'otteluohjelma.v1';
 const TZ = 'Europe/Helsinki';

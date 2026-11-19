@@ -26,6 +26,12 @@
       ]
     },
     {
+      "id": "veikkausliiga",
+      "name": "Veikkausliiga",
+      "sport": "soccer",
+      "defaults": []
+    },
+    {
       "id": "national",
       "name": "Maajoukkueet",
       "sport": "soccer",
@@ -93,6 +99,15 @@
         "playoffs"
       ],
       "service": "MTV Katsomo"
+    },
+    {
+      "id": "veikkausliiga",
+      "cat": "veikkausliiga",
+      "name": "Veikkausliiga",
+      "source": "espn",
+      "slug": "fin.1",
+      "teams": true,
+      "service": "Ruutu+"
     },
     {
       "id": "nations",
@@ -177,6 +192,10 @@
       "label": "Yle Areena / TV1 / TV2",
       "url": "https://areena.yle.fi/",
       "color": "#15a39a"
+    },
+    "Ruutu+": {
+      "url": "https://www.ruutu.fi/",
+      "color": "#f08a00"
     },
     "?": {
       "url": "",
