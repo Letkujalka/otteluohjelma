@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21T03:17:02.550Z",
+ "updated": "2026-11-21T12:47:50.477Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -286,10 +286,10 @@
    "round": "",
    "home": "K-Espoo",
    "away": "Ässät",
-   "homeScore": null,
-   "awayScore": null,
-   "state": "pre",
-   "detail": "",
+   "homeScore": 1,
+   "awayScore": 0,
+   "state": "in",
+   "detail": "20'",
    "service": "MTV Katsomo"
   },
   {
