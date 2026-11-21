@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T21:52:33.801Z",
+ "updated": "2026-11-21T03:17:02.550Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -273,8 +273,8 @@
    "away": "Espanyol",
    "homeScore": 0,
    "awayScore": 1,
-   "state": "in",
-   "detail": "90'+3'",
+   "state": "post",
+   "detail": "",
    "service": "Disney+"
   },
   {
