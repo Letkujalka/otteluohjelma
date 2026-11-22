@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T17:53:20.862Z",
+ "updated": "2026-11-22T23:39:31.654Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -363,8 +363,8 @@
    "away": "Málaga",
    "homeScore": 1,
    "awayScore": 0,
-   "state": "in",
-   "detail": "23'",
+   "state": "post",
+   "detail": "",
    "service": "Disney+"
   },
   {
@@ -376,9 +376,9 @@
    "round": "",
    "home": "Getafe",
    "away": "Atlético Madrid",
-   "homeScore": null,
-   "awayScore": null,
-   "state": "pre",
+   "homeScore": 0,
+   "awayScore": 3,
+   "state": "post",
    "detail": "",
    "service": "Disney+"
   },
