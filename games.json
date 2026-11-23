@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T23:39:31.654Z",
+ "updated": "2026-11-23T07:52:36.667Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -157,21 +157,6 @@
   ]
  },
  "games": [
-  {
-   "id": "espn-401882805",
-   "start": "2026-11-20T20:00Z",
-   "cat": "laliga",
-   "comp": "laliga",
-   "compName": "LaLiga",
-   "round": "",
-   "home": "Athletic Club",
-   "away": "Espanyol",
-   "homeScore": 0,
-   "awayScore": 1,
-   "state": "post",
-   "detail": "",
-   "service": "Disney+"
-  },
   {
    "id": "liiga-2027-2701472",
    "start": "2026-11-21T12:00:00.000Z",
