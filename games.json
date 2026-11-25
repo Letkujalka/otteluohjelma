@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T02:35:36.193Z",
+ "updated": "2026-11-25T14:34:56.928Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -2011,9 +2011,9 @@
    "round": "",
    "home": "Rayo Vallecano",
    "away": "Athletic Club",
-   "homeScore": 0,
-   "awayScore": 0,
-   "state": "post",
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
    "detail": "",
    "service": "Disney+"
   },
