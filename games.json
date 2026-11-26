@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-26T00:31:21.990Z",
+ "updated": "2026-11-26T21:42:37.833Z",
  "failed": [],
  "teams": {
   "ucl": [
@@ -157,51 +157,6 @@
   ]
  },
  "games": [
-  {
-   "id": "liiga-2027-2701475",
-   "start": "2026-11-24T16:30:00.000Z",
-   "cat": "liiga",
-   "comp": "liiga",
-   "compName": "Liiga",
-   "round": "",
-   "home": "Ilves",
-   "away": "Ässät",
-   "homeScore": 4,
-   "awayScore": 2,
-   "state": "post",
-   "detail": "",
-   "service": "MTV Katsomo"
-  },
-  {
-   "id": "liiga-2027-2701476",
-   "start": "2026-11-24T16:30:00.000Z",
-   "cat": "liiga",
-   "comp": "liiga",
-   "compName": "Liiga",
-   "round": "",
-   "home": "SaiPa",
-   "away": "Lukko",
-   "homeScore": 6,
-   "awayScore": 1,
-   "state": "post",
-   "detail": "",
-   "service": "MTV Katsomo"
-  },
-  {
-   "id": "liiga-2027-2701478",
-   "start": "2026-11-24T16:30:00.000Z",
-   "cat": "liiga",
-   "comp": "liiga",
-   "compName": "Liiga",
-   "round": "",
-   "home": "Sport",
-   "away": "K-Espoo",
-   "homeScore": 3,
-   "awayScore": 2,
-   "state": "post",
-   "detail": "",
-   "service": "MTV Katsomo"
-  },
   {
    "id": "espn-401915380",
    "start": "2026-11-24T17:45Z",
@@ -541,9 +496,9 @@
    "round": "",
    "home": "Sport",
    "away": "Ilves",
-   "homeScore": null,
-   "awayScore": null,
-   "state": "pre",
+   "homeScore": 2,
+   "awayScore": 3,
+   "state": "post",
    "detail": "",
    "service": "MTV Katsomo"
   },
@@ -2521,6 +2476,36 @@
    "round": "",
    "home": "Sport",
    "away": "JYP",
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "liiga-2027-2701546",
+   "start": "2026-12-17T16:30:00.000Z",
+   "cat": "liiga",
+   "comp": "liiga",
+   "compName": "Liiga",
+   "round": "",
+   "home": "Ilves",
+   "away": "KooKoo",
+   "homeScore": null,
+   "awayScore": null,
+   "state": "pre",
+   "detail": "",
+   "service": "MTV Katsomo"
+  },
+  {
+   "id": "liiga-2027-2701547",
+   "start": "2026-12-17T16:30:00.000Z",
+   "cat": "liiga",
+   "comp": "liiga",
+   "compName": "Liiga",
+   "round": "",
+   "home": "Kärpät",
+   "away": "K-Espoo",
    "homeScore": null,
    "awayScore": null,
    "state": "pre",
