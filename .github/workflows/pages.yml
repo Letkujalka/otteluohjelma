@@ -1,6 +1,7 @@
 # Hakee pelit kahden tunnin välein ja julkaisee sovelluksen GitHub Pagesiin.
 # Ajetaan myös, kun main-haaraan tulee muutos, ja käsin (Actions → Run workflow).
 # Käyttöönotto: Settings → Pages → Source: "GitHub Actions".
+# GitHub ajaa ajastukset usein myöhässä; käytännössä päivitys tulee muutaman tunnin välein.
 name: Otteluohjelma GitHub Pagesiin
 
 on:
@@ -20,14 +21,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - name: Hae pelit
@@ -44,8 +42,26 @@ jobs:
           git commit -m "Päivitä otteluohjelma"
           git pull --rebase && git push
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: .
+
+  # Julkaisu omana vaiheenaan: GitHubin julkaisupalvelu ei aina heti löydä
+  # juuri ladattua pakettia ("No artifacts named github-pages"), joten
+  # epäonnistunut julkaisu yritetään hetken päästä uudelleen.
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.retry.outputs.page_url || steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Odota ennen uutta yritystä
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 45
+      - id: retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4

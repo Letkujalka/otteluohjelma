@@ -29,7 +29,8 @@ pelit ja palvelun, josta pelin näkee: MTV Katsomo, Disney+ tai Yle
 
 ## Mistä pelit tulevat
 
-GitHub Actions ajaa `scripts/fetch-games.mjs`-skriptin kahden tunnin välein.
+GitHub Actions ajaa `scripts/fetch-games.mjs`-skriptin kahden tunnin välein
+(GitHub ajaa ajastukset usein myöhässä, käytännössä muutaman tunnin välein).
 Skripti hakee kategorioiden kaikki pelit ja joukkuelistat ja kirjoittaa ne
 tiedostoon `games.json`, jonka sovellus lataa ja suodattaa suosikkien mukaan.
 Ystävyysotteluista ja Copa del Reystä otetaan vain pelit, joissa on kategorian
